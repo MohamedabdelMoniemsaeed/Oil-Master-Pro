@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "appName": "OilMaster Pro",
+  "dashboard": "Dashboard",
+  "products": "Products",
+  "customers": "Customers",
+  "cars": "Cars",
+  "sales": "Sales",
+  "purchases": "Purchases",
+  "reports": "Reports",
+  "settings": "Settings",
+  "logout": "Logout",
+  "search": "Search",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add"
+}

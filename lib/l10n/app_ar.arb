@@ -1,0 +1,19 @@
+{
+  "@@locale": "ar",
+  "appName": "أويل ماستر برو",
+  "dashboard": "الرئيسية",
+  "products": "المنتجات",
+  "customers": "العملاء",
+  "cars": "السيارات",
+  "sales": "المبيعات",
+  "purchases": "المشتريات",
+  "reports": "التقارير",
+  "settings": "الإعدادات",
+  "logout": "تسجيل الخروج",
+  "search": "بحث",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "edit": "تعديل",
+  "add": "إضافة"
+}
