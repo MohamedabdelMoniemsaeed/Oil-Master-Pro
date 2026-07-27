@@ -1,8 +1,18 @@
 import 'package:flutter/widgets.dart';
 
 import 'app.dart';
+import 'core/services/service_locator.dart';
 
-void main() {
+
+Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const CarOilShopApp());
+
+
+  await setupServiceLocator();
+
+
+  runApp(
+    const CarOilShopApp(),
+  );
 }

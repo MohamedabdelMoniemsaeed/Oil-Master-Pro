@@ -1,12 +1,15 @@
 import 'package:drift/drift.dart';
 
-class PurchasesTable extends Table {
+class SalesTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   TextColumn get invoiceNumber =>
       text()();
 
-  IntColumn get supplierId =>
+  IntColumn get customerId =>
+      integer().nullable()();
+
+  IntColumn get carId =>
       integer().nullable()();
 
   RealColumn get subtotal =>
@@ -15,8 +18,14 @@ class PurchasesTable extends Table {
   RealColumn get discount =>
       real().withDefault(const Constant(0))();
 
+  RealColumn get tax =>
+      real().withDefault(const Constant(0))();
+
   RealColumn get total =>
       real().withDefault(const Constant(0))();
+
+  TextColumn get paymentMethod =>
+      text().withDefault(const Constant('cash'))();
 
   TextColumn get notes =>
       text().nullable()();

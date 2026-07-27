@@ -1,18 +1,15 @@
 import 'package:drift/drift.dart';
 
-class SuppliersTable extends Table {
+class CategoriesTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get name =>
+  TextColumn get nameAr =>
       text()();
 
-  TextColumn get phone =>
+  TextColumn get nameEn =>
       text().nullable()();
 
-  TextColumn get address =>
-      text().nullable()();
-
-  TextColumn get notes =>
+  TextColumn get description =>
       text().nullable()();
 
   BoolColumn get active =>
