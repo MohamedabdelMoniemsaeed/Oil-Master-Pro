@@ -19,6 +19,15 @@ class ProductsRepository {
     return dao.addProduct(product);
   }
 
+  Future<void> decreaseQuantity(
+  int productId,
+  int quantity,
+) {
+  return dao.decreaseQuantity(
+    productId,
+    quantity,
+  );
+}
 
   Future<bool> updateProduct(
     ProductsTableCompanion product,

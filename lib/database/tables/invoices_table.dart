@@ -6,7 +6,7 @@ class InvoicesTable extends Table {
   TextColumn get invoiceNumber => text()();
 
   IntColumn get customerId => integer().nullable()();
-
+  
   RealColumn get total => real()();
 
   RealColumn get discount =>

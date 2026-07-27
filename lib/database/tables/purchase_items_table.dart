@@ -1,20 +1,37 @@
 import 'package:drift/drift.dart';
 
+
 class PurchaseItemsTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+
+
+  IntColumn get id =>
+      integer().autoIncrement()();
+
+
 
   IntColumn get purchaseId =>
       integer()();
 
+
+
   IntColumn get productId =>
       integer()();
 
+
+
   IntColumn get quantity =>
-      integer().withDefault(const Constant(1))();
+      integer()();
+
+
 
   RealColumn get price =>
-      real().withDefault(const Constant(0))();
+      real()();
+
+
 
   RealColumn get total =>
-      real().withDefault(const Constant(0))();
+      real()();
+
+
+
 }

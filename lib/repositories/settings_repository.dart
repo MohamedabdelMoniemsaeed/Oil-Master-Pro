@@ -1,27 +1,53 @@
-import '../database/dao/settings_dao.dart';
 import '../database/database.dart';
+import '../database/dao/settings_dao.dart';
+
+
 
 class SettingsRepository {
+
+
   final SettingsDao dao;
 
-  SettingsRepository(this.dao);
 
 
-  Future<SettingsTableData?> getSettings() {
-    return dao.getSetting();
+  SettingsRepository(
+    this.dao,
+  );
+
+
+
+
+  Future<SettingsTableData?> getSettings(){
+
+    return dao.getSettings();
+
   }
+
+
 
 
   Future<int> saveSettings(
     SettingsTableCompanion settings,
-  ) {
-    return dao.insertSetting(settings);
+  ){
+
+    return dao.saveSettings(
+      settings,
+    );
+
   }
+
+
 
 
   Future<bool> updateSettings(
-    SettingsTableCompanion settings,
-  ) {
-    return dao.updateSetting(settings);
+    SettingsTableData settings,
+  ){
+
+    return dao.updateSettings(
+      settings,
+    );
+
   }
+
+
 }
