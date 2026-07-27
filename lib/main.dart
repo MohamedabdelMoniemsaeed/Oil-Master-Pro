@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'features/auth/screens/login_screen.dart';
 
 void main() {
   runApp(const CarOilShopApp());
@@ -10,23 +11,13 @@ class CarOilShopApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Car Oil Shop',
       debugShowCheckedModeBanner: false,
+      title: 'Car Oil Shop',
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Car Oil Shop',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      home: const LoginScreen(),
     );
   }
 }
