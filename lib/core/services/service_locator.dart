@@ -1,7 +1,8 @@
 import 'package:get_it/get_it.dart';
 
 import '../../database/database.dart';
-
+import '../../database/dao/invoices_dao.dart';
+import '../../repositories/invoices_repository.dart';
 // DAO
 import '../../database/dao/settings_dao.dart';
 import '../../database/dao/products_dao.dart';
@@ -39,7 +40,11 @@ Future<void> setupServiceLocator() async {
   // =========================
   // DAO
   // =========================
-
+getIt.registerLazySingleton<InvoicesDao>(
+  () => InvoicesDao(
+    getIt<AppDatabase>(),
+  ),
+);
 
   getIt.registerLazySingleton<SettingsDao>(
     () => SettingsDao(
@@ -67,6 +72,11 @@ Future<void> setupServiceLocator() async {
   // Repository
   // =========================
 
+getIt.registerLazySingleton<InvoicesRepository>(
+  () => InvoicesRepository(
+    getIt<InvoicesDao>(),
+  ),
+);
 
   getIt.registerLazySingleton<SettingsRepository>(
     () => SettingsRepository(

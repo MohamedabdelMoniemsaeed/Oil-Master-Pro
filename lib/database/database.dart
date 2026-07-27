@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'tables/invoices_table.dart';
+import 'tables/invoice_items_table.dart';
 import 'tables/settings_table.dart';
 import 'tables/users_table.dart';
 import 'tables/categories_table.dart';
@@ -13,7 +17,7 @@ import 'tables/sales_table.dart';
 import 'tables/sale_items_table.dart';
 import 'tables/purchases_table.dart';
 import 'tables/purchase_items_table.dart';
-
+import 'dao/invoices_dao.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
@@ -30,6 +34,11 @@ part 'database.g.dart';
     SaleItemsTable,
     PurchasesTable,
     PurchaseItemsTable,
+    InvoicesTable,
+    InvoiceItemsTable,
+  ],
+  daos: [
+    InvoicesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -41,6 +50,12 @@ class AppDatabase extends _$AppDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    return NativeDatabase.memory();
+    final appDir = await getApplicationSupportDirectory();
+
+    final file = File(
+      p.join(appDir.path, 'oilmaster.db'),
+    );
+
+    return NativeDatabase(file);
   });
 }

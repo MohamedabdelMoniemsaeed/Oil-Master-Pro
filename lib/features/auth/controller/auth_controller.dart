@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/service_locator.dart';
 import '../../../repositories/users_repository.dart';
-import '../../../database/database.dart';
 
 
 final usersRepositoryProvider =

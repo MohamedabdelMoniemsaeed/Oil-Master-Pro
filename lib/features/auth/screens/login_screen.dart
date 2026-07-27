@@ -74,12 +74,12 @@ class _LoginScreenState
 
         builder: (context, close) {
 
-          return InfoBar(
-            title: const Text(
+          return const InfoBar(
+            title: Text(
               "تم تسجيل الدخول",
             ),
 
-            content: const Text(
+            content: Text(
               "مرحباً بك في OilMaster Pro",
             ),
 
@@ -111,13 +111,13 @@ class _LoginScreenState
 
         builder: (context, close) {
 
-          return InfoBar(
+          return const InfoBar(
 
             title:
-                const Text("خطأ"),
+                Text("خطأ"),
 
             content:
-                const Text(
+                Text(
                   "اسم المستخدم أو كلمة المرور غير صحيحة",
                 ),
 
@@ -237,6 +237,14 @@ class _LoginScreenState
 
                   child: FilledButton(
 
+                    onPressed:
+
+                    loading
+
+                    ? null
+
+                    : login,
+
                     child: Text(
 
                       loading
@@ -246,16 +254,6 @@ class _LoginScreenState
                       : "دخول",
 
                     ),
-
-
-
-                    onPressed:
-
-                    loading
-
-                    ? null
-
-                    : login,
 
 
                   ),
