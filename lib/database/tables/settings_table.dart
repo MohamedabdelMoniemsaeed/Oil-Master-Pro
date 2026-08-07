@@ -29,7 +29,11 @@ class SettingsTable extends Table {
   TextColumn get logo =>
       text().nullable()();
 
+  TextColumn get licenseKey =>
+      text().nullable()();
 
+  DateTimeColumn get expiryDate =>
+      dateTime().nullable()();
 
   DateTimeColumn get createdAt =>
       dateTime().withDefault(

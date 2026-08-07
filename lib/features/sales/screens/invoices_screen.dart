@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/service_locator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../repositories/invoices_repository.dart';
 import '../../../database/database.dart';
 
@@ -11,7 +11,7 @@ import 'new_invoice_screen.dart';
 
 
 final invoicesProvider =
-    FutureProvider<List<Invoice>>((ref) async {
+    FutureProvider<List<InvoicesTableData>>((ref) async {
 
   return getIt<InvoicesRepository>()
       .getInvoices();

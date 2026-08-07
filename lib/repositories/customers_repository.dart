@@ -68,4 +68,8 @@ class CustomersRepository {
 
   }
 
+  Future<int> getCustomersCount() {
+    return dao.getCustomersCount();
+  }
+
 }

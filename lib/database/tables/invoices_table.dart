@@ -6,6 +6,10 @@ class InvoicesTable extends Table {
   TextColumn get invoiceNumber => text()();
 
   IntColumn get customerId => integer().nullable()();
+
+  IntColumn get carId => integer().nullable()();
+
+  IntColumn get currentKm => integer().nullable()();
   
   RealColumn get total => real()();
 

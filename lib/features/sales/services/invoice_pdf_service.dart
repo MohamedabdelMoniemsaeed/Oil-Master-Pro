@@ -12,9 +12,9 @@ class InvoicePdfService {
 
   Future<void> printInvoice({
 
-    required Invoice invoice,
+    required InvoicesTableData invoice,
 
-    required List<InvoiceItem> items,
+    required List<InvoiceItemsTableData> items,
 
   }) async {
 

@@ -13,6 +13,8 @@ import '../../database/dao/users_dao.dart';
 import '../../database/dao/customers_dao.dart';
 import '../../database/dao/suppliers_dao.dart';
 import '../../database/dao/purchases_dao.dart';
+import '../../database/dao/invoices_dao.dart';
+import '../../database/dao/cars_dao.dart';
 
 
 
@@ -26,6 +28,8 @@ import '../../repositories/users_repository.dart';
 import '../../repositories/customers_repository.dart';
 import '../../repositories/suppliers_repository.dart';
 import '../../repositories/purchases_repository.dart';
+import '../../repositories/invoices_repository.dart';
+import '../../repositories/cars_repository.dart';
 
 
 
@@ -33,7 +37,7 @@ import '../../repositories/purchases_repository.dart';
 // Services
 // =========================
 
-import 'app_start_service.dart';
+import '../../features/cars/services/app_start_service.dart';
 
 
 
@@ -133,9 +137,17 @@ Future<void> setupServiceLocator() async {
 
   );
 
+  getIt.registerLazySingleton<InvoicesDao>(
+    () => InvoicesDao(
+      getIt<AppDatabase>(),
+    ),
+  );
 
-
-
+  getIt.registerLazySingleton<CarsDao>(
+    () => CarsDao(
+      getIt<AppDatabase>(),
+    ),
+  );
 
 
 
@@ -221,6 +233,18 @@ Future<void> setupServiceLocator() async {
 
   );
 
+  getIt.registerLazySingleton<InvoicesRepository>(
+    () => InvoicesRepository(
+      getIt<InvoicesDao>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CarsRepository>(
+    () => CarsRepository(
+      getIt<CarsDao>(),
+    ),
+  );
+
 
 
 
@@ -234,15 +258,11 @@ Future<void> setupServiceLocator() async {
 
 
   getIt.registerLazySingleton<AppStartService>(
-
     () => AppStartService(
-
       getIt<SettingsRepository>(),
-
     ),
-
   );
 
-
-
+  // Initialize Admin User
+  await getIt<SettingsDao>().initDefaultAdmin();
 }

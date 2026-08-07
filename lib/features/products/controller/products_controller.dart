@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/service_locator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../database/database.dart';
 import '../../../repositories/products_repository.dart';
 
@@ -11,7 +11,7 @@ class ProductsController extends StateNotifier<List<ProductsTableData>> {
   final ProductsRepository _repository = getIt<ProductsRepository>();
 
   Future<void> loadProducts() async {
-    state = await _repository.getAll();
+    state = await _repository.getProducts();
   }
 
   Future<void> search(String keyword) async {
@@ -31,7 +31,7 @@ class ProductsController extends StateNotifier<List<ProductsTableData>> {
     required int quantity,
     required int minimumQuantity,
   }) async {
-    await _repository.add(
+    await _repository.addProduct(
       ProductsTableCompanion.insert(
         nameAr: name,
         barcode: Value(barcode),
@@ -48,12 +48,12 @@ class ProductsController extends StateNotifier<List<ProductsTableData>> {
   Future<void> updateProduct(
     ProductsTableData product,
   ) async {
-    await _repository.update(product);
+    await _repository.updateProduct(product);
     await loadProducts();
   }
 
   Future<void> deleteProduct(int id) async {
-    await _repository.delete(id);
+    await _repository.deleteProduct(id);
     await loadProducts();
   }
 }

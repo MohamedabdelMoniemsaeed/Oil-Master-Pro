@@ -1,5 +1,5 @@
-import '../../database/database.dart';
-import '../../repositories/settings_repository.dart';
+import '../../../database/database.dart';
+import '../../../repositories/settings_repository.dart';
 
 
 class AppStartService {
@@ -23,7 +23,7 @@ class AppStartService {
     }
 
 
-    return settings.isFirstRun;
+    return false;
 
   }
 

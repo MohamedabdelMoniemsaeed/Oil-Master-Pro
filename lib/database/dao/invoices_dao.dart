@@ -1,6 +1,9 @@
 import 'package:drift/drift.dart';
 
 import '../database.dart';
+import '../tables/invoices_table.dart';
+import '../tables/invoice_items_table.dart';
+import '../tables/products_table.dart';
 
 part 'invoices_dao.g.dart';
 
@@ -8,6 +11,7 @@ part 'invoices_dao.g.dart';
   tables: [
     InvoicesTable,
     InvoiceItemsTable,
+    ProductsTable,
   ],
 )
 class InvoicesDao extends DatabaseAccessor<AppDatabase>
@@ -26,11 +30,11 @@ class InvoicesDao extends DatabaseAccessor<AppDatabase>
     return into(invoiceItemsTable).insert(item);
   }
 
-  Future<List<Invoice>> getInvoices() {
+  Future<List<InvoicesTableData>> getInvoices() {
     return select(invoicesTable).get();
   }
 
-  Future<List<InvoiceItem>> getInvoiceItems(
+  Future<List<InvoiceItemsTableData>> getInvoiceItems(
     int invoiceId,
   ) {
     return (select(invoiceItemsTable)
@@ -38,6 +42,38 @@ class InvoicesDao extends DatabaseAccessor<AppDatabase>
             (tbl) => tbl.invoiceId.equals(invoiceId),
           ))
         .get();
+  }
+
+  Future<double> getTodaySales() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    final query = select(invoicesTable)
+      ..where((tbl) => tbl.createdAt.isBiggerOrEqualValue(today));
+      
+    final invoices = await query.get();
+    return invoices.fold<double>(0.0, (sum, item) => sum + item.total);
+  }
+
+  Future<double> getTodayProfit() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    // Join InvoiceItems with Products to get purchasePrice
+    final query = select(invoiceItemsTable).join([
+      innerJoin(invoicesTable, invoicesTable.id.equalsExp(invoiceItemsTable.invoiceId)),
+      innerJoin(productsTable, productsTable.id.equalsExp(invoiceItemsTable.productId)),
+    ])
+    ..where(invoicesTable.createdAt.isBiggerOrEqualValue(today));
+
+    final results = await query.get();
+    double profit = 0;
+    for (final row in results) {
+      final item = row.readTable(invoiceItemsTable);
+      final product = row.readTable(productsTable);
+      profit += (item.total - (item.quantity * product.purchasePrice));
+    }
+    return profit;
   }
 
   Future<int> deleteInvoice(

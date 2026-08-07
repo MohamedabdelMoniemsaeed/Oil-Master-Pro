@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
 
 import '../database.dart';
+import '../tables/users_table.dart';
 
+part 'users_dao.g.dart';
 
 @DriftAccessor(tables: [UsersTable])
 class UsersDao extends DatabaseAccessor<AppDatabase>
@@ -41,10 +43,11 @@ class UsersDao extends DatabaseAccessor<AppDatabase>
   // تحديث مستخدم
   Future<bool> updateUser(
     UsersTableCompanion user,
-  ) {
+  ) async {
 
-    return update(usersTable)
+    final count = await update(usersTable)
         .write(user);
+    return count > 0;
 
   }
 

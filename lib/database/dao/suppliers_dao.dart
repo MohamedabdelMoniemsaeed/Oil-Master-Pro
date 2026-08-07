@@ -1,11 +1,9 @@
 import 'package:drift/drift.dart';
 
 import '../database.dart';
-
+import '../tables/suppliers_table.dart';
 
 part 'suppliers_dao.g.dart';
-
-
 
 @DriftAccessor(
   tables: [SuppliersTable],

@@ -1,91 +1,24 @@
-import '../database/database.dart';
 import '../database/dao/purchases_dao.dart';
-
-
+import '../database/database.dart';
 
 class PurchasesRepository {
-
-
   final PurchasesDao dao;
 
+  PurchasesRepository(this.dao);
 
+  Future<int> createPurchase(PurchasesTableCompanion purchase) => dao.createPurchase(purchase);
+  
+  Future<void> addPurchaseItem(PurchaseItemsTableCompanion item) => dao.addPurchaseItem(item);
 
-  PurchasesRepository(
-    this.dao,
-  );
-
-
-
-
-  Future<List<PurchasesTableData>> getPurchases(){
-
+  Future<List<PurchasesTableData>> getPurchases() {
     return dao.getAllPurchases();
-
   }
 
-
-
-
-
-  Future<int> createPurchase(
-
-    PurchasesTableCompanion purchase,
-
-  ){
-
-    return dao.addPurchase(
-      purchase,
-    );
-
+  Future<List<PurchaseItemsTableData>> getPurchaseItems(int purchaseId) {
+    return dao.getPurchaseItems(purchaseId);
   }
 
-
-
-
-
-  Future<int> addPurchaseItem(
-
-    PurchaseItemsTableCompanion item,
-
-  ){
-
-    return dao.addPurchaseItem(
-      item,
-    );
-
+  Future<PurchasesTableData?> getPurchaseById(int id) {
+    return dao.getPurchaseById(id);
   }
-
-
-
-
-
-  Future<List<PurchaseItemsTableData>> getPurchaseItems(
-
-    int purchaseId,
-
-  ){
-
-    return dao.getPurchaseItems(
-      purchaseId,
-    );
-
-  }
-
-
-
-
-
-  Future<PurchasesTableData?> getPurchaseById(
-
-    int id,
-
-  ){
-
-    return dao.getPurchaseById(
-      id,
-    );
-
-  }
-
-
 }

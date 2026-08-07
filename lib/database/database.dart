@@ -19,6 +19,8 @@ import 'tables/purchases_table.dart';
 import 'tables/purchase_items_table.dart';
 import 'dao/invoices_dao.dart';
 import 'dao/customers_dao.dart';
+import 'dao/cars_dao.dart';
+import 'dao/products_dao.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
@@ -37,19 +39,38 @@ part 'database.g.dart';
     PurchaseItemsTable,
     InvoicesTable,
     InvoiceItemsTable,
-    
-    
   ],
   daos: [
-  InvoicesDao,
-  CustomersDao,
-],
+    InvoicesDao,
+    CustomersDao,
+    CarsDao,
+    ProductsDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+      },
+      onUpgrade: (m, from, to) async {
+        if (from < 2) {
+          // Add columns added in version 2
+          await m.addColumn(invoicesTable, invoicesTable.carId);
+          await m.addColumn(invoicesTable, invoicesTable.currentKm);
+          await m.addColumn(settingsTable, settingsTable.logo);
+          await m.addColumn(settingsTable, settingsTable.licenseKey);
+          await m.addColumn(settingsTable, settingsTable.expiryDate);
+        }
+      },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {

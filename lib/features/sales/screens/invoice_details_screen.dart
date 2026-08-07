@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/service_locator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../repositories/invoices_repository.dart';
 import '../../../database/database.dart';
 
@@ -10,7 +10,7 @@ import '../services/invoice_pdf_service.dart';
 
 
 final invoiceItemsProvider =
-    FutureProvider.family<List<InvoiceItem>, int>(
+    FutureProvider.family<List<InvoiceItemsTableData>, int>(
   (ref, invoiceId) async {
 
     return getIt<InvoicesRepository>()
@@ -24,7 +24,7 @@ final invoiceItemsProvider =
 class InvoiceDetailsScreen extends ConsumerWidget {
 
 
-  final Invoice invoice;
+  final InvoicesTableData invoice;
 
 
 

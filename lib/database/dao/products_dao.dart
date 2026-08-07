@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../database.dart';
+import '../tables/products_table.dart';
 
 part 'products_dao.g.dart';
 
@@ -63,6 +64,13 @@ class ProductsDao extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
+
+  Future<int> getProductsCount() async {
+    final countExp = productsTable.id.count();
+    final query = selectOnly(productsTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
+  }
 
   /// خصم كمية من المخزون بعد البيع
   Future<void> decreaseQuantity(

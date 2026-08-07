@@ -6,7 +6,7 @@ import 'add_product_screen.dart';
 import 'edit_product_screen.dart';
 
 class ProductsScreen extends ConsumerStatefulWidget {
-  const ProductsScreen({super.key});
+  ProductsScreen({super.key});
 
   @override
   ConsumerState<ProductsScreen> createState() =>
@@ -93,7 +93,7 @@ class _ProductsScreenState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(FluentIcons.edit),
+                                icon: Icon(FluentIcons.edit),
                                 onPressed: () async {
                                   final result =
                                       await showDialog<bool>(
@@ -111,7 +111,7 @@ class _ProductsScreenState
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(
+                                icon: Icon(
                                   FluentIcons.delete,
                                   color: Colors.red,
                                 ),
@@ -121,7 +121,7 @@ class _ProductsScreenState
                                       .deleteProduct(product.id);
                                 },
                               ),
-                              const SizedBox(width: 10),
+                              SizedBox(width: 10),
                               Icon(
                                 product.quantity <=
                                         product.minimumQuantity

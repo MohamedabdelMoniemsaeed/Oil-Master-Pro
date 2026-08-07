@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/service_locator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../database/database.dart';
 import '../../../repositories/customers_repository.dart';
 

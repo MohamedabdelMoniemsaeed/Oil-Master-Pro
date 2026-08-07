@@ -8,7 +8,7 @@ class ProductsRepository {
   ProductsRepository(this.dao);
 
 
-  Future<List<Product>> getProducts() {
+  Future<List<ProductsTableData>> getProducts() {
     return dao.getAllProducts();
   }
 
@@ -30,7 +30,7 @@ class ProductsRepository {
 }
 
   Future<bool> updateProduct(
-    ProductsTableCompanion product,
+    ProductsTableData product,
   ) {
     return dao.updateProduct(product);
   }
@@ -43,9 +43,13 @@ class ProductsRepository {
   }
 
 
-  Future<List<Product>> search(
+  Future<List<ProductsTableData>> search(
     String text,
   ) {
     return dao.searchProducts(text);
+  }
+
+  Future<int> getProductsCount() {
+    return dao.getProductsCount();
   }
 }

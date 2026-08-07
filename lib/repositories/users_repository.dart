@@ -23,14 +23,27 @@ class UsersRepository {
   }
 
 
+  Future<UsersTableData?> getUserByUsername(
+    String username,
+  ) {
+    return dao.getUserByUsername(
+      username,
+    );
+  }
+
   Future<int> createUser(
     UsersTableCompanion user,
   ) {
-
     return dao.addUser(
       user,
     );
-
   }
 
+  Future<List<UsersTableData>> getUsers() {
+    return dao.getUsers();
+  }
+
+  Future<int> deleteUser(int id) {
+    return dao.deleteUser(id);
+  }
 }

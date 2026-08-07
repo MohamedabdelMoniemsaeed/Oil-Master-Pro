@@ -42,6 +42,18 @@ class $SettingsTableTable extends SettingsTable
   late final GeneratedColumn<String> logo = GeneratedColumn<String>(
       'logo', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _licenseKeyMeta =
+      const VerificationMeta('licenseKey');
+  @override
+  late final GeneratedColumn<String> licenseKey = GeneratedColumn<String>(
+      'license_key', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _expiryDateMeta =
+      const VerificationMeta('expiryDate');
+  @override
+  late final GeneratedColumn<DateTime> expiryDate = GeneratedColumn<DateTime>(
+      'expiry_date', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -52,7 +64,7 @@ class $SettingsTableTable extends SettingsTable
       defaultValue: currentDateAndTime);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, shopName, phone, address, logo, createdAt];
+      [id, shopName, phone, address, logo, licenseKey, expiryDate, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -82,6 +94,18 @@ class $SettingsTableTable extends SettingsTable
       context.handle(
           _logoMeta, logo.isAcceptableOrUnknown(data['logo']!, _logoMeta));
     }
+    if (data.containsKey('license_key')) {
+      context.handle(
+          _licenseKeyMeta,
+          licenseKey.isAcceptableOrUnknown(
+              data['license_key']!, _licenseKeyMeta));
+    }
+    if (data.containsKey('expiry_date')) {
+      context.handle(
+          _expiryDateMeta,
+          expiryDate.isAcceptableOrUnknown(
+              data['expiry_date']!, _expiryDateMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -105,6 +129,10 @@ class $SettingsTableTable extends SettingsTable
           .read(DriftSqlType.string, data['${effectivePrefix}address']),
       logo: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}logo']),
+      licenseKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}license_key']),
+      expiryDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}expiry_date']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -123,6 +151,8 @@ class SettingsTableData extends DataClass
   final String? phone;
   final String? address;
   final String? logo;
+  final String? licenseKey;
+  final DateTime? expiryDate;
   final DateTime createdAt;
   const SettingsTableData(
       {required this.id,
@@ -130,6 +160,8 @@ class SettingsTableData extends DataClass
       this.phone,
       this.address,
       this.logo,
+      this.licenseKey,
+      this.expiryDate,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -145,6 +177,12 @@ class SettingsTableData extends DataClass
     if (!nullToAbsent || logo != null) {
       map['logo'] = Variable<String>(logo);
     }
+    if (!nullToAbsent || licenseKey != null) {
+      map['license_key'] = Variable<String>(licenseKey);
+    }
+    if (!nullToAbsent || expiryDate != null) {
+      map['expiry_date'] = Variable<DateTime>(expiryDate);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -159,6 +197,12 @@ class SettingsTableData extends DataClass
           ? const Value.absent()
           : Value(address),
       logo: logo == null && nullToAbsent ? const Value.absent() : Value(logo),
+      licenseKey: licenseKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(licenseKey),
+      expiryDate: expiryDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(expiryDate),
       createdAt: Value(createdAt),
     );
   }
@@ -172,6 +216,8 @@ class SettingsTableData extends DataClass
       phone: serializer.fromJson<String?>(json['phone']),
       address: serializer.fromJson<String?>(json['address']),
       logo: serializer.fromJson<String?>(json['logo']),
+      licenseKey: serializer.fromJson<String?>(json['licenseKey']),
+      expiryDate: serializer.fromJson<DateTime?>(json['expiryDate']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -184,6 +230,8 @@ class SettingsTableData extends DataClass
       'phone': serializer.toJson<String?>(phone),
       'address': serializer.toJson<String?>(address),
       'logo': serializer.toJson<String?>(logo),
+      'licenseKey': serializer.toJson<String?>(licenseKey),
+      'expiryDate': serializer.toJson<DateTime?>(expiryDate),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -194,6 +242,8 @@ class SettingsTableData extends DataClass
           Value<String?> phone = const Value.absent(),
           Value<String?> address = const Value.absent(),
           Value<String?> logo = const Value.absent(),
+          Value<String?> licenseKey = const Value.absent(),
+          Value<DateTime?> expiryDate = const Value.absent(),
           DateTime? createdAt}) =>
       SettingsTableData(
         id: id ?? this.id,
@@ -201,6 +251,8 @@ class SettingsTableData extends DataClass
         phone: phone.present ? phone.value : this.phone,
         address: address.present ? address.value : this.address,
         logo: logo.present ? logo.value : this.logo,
+        licenseKey: licenseKey.present ? licenseKey.value : this.licenseKey,
+        expiryDate: expiryDate.present ? expiryDate.value : this.expiryDate,
         createdAt: createdAt ?? this.createdAt,
       );
   SettingsTableData copyWithCompanion(SettingsTableCompanion data) {
@@ -210,6 +262,10 @@ class SettingsTableData extends DataClass
       phone: data.phone.present ? data.phone.value : this.phone,
       address: data.address.present ? data.address.value : this.address,
       logo: data.logo.present ? data.logo.value : this.logo,
+      licenseKey:
+          data.licenseKey.present ? data.licenseKey.value : this.licenseKey,
+      expiryDate:
+          data.expiryDate.present ? data.expiryDate.value : this.expiryDate,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -222,14 +278,16 @@ class SettingsTableData extends DataClass
           ..write('phone: $phone, ')
           ..write('address: $address, ')
           ..write('logo: $logo, ')
+          ..write('licenseKey: $licenseKey, ')
+          ..write('expiryDate: $expiryDate, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, shopName, phone, address, logo, createdAt);
+  int get hashCode => Object.hash(
+      id, shopName, phone, address, logo, licenseKey, expiryDate, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -239,6 +297,8 @@ class SettingsTableData extends DataClass
           other.phone == this.phone &&
           other.address == this.address &&
           other.logo == this.logo &&
+          other.licenseKey == this.licenseKey &&
+          other.expiryDate == this.expiryDate &&
           other.createdAt == this.createdAt);
 }
 
@@ -248,6 +308,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
   final Value<String?> phone;
   final Value<String?> address;
   final Value<String?> logo;
+  final Value<String?> licenseKey;
+  final Value<DateTime?> expiryDate;
   final Value<DateTime> createdAt;
   const SettingsTableCompanion({
     this.id = const Value.absent(),
@@ -255,6 +317,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     this.phone = const Value.absent(),
     this.address = const Value.absent(),
     this.logo = const Value.absent(),
+    this.licenseKey = const Value.absent(),
+    this.expiryDate = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   SettingsTableCompanion.insert({
@@ -263,6 +327,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     this.phone = const Value.absent(),
     this.address = const Value.absent(),
     this.logo = const Value.absent(),
+    this.licenseKey = const Value.absent(),
+    this.expiryDate = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   static Insertable<SettingsTableData> custom({
@@ -271,6 +337,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     Expression<String>? phone,
     Expression<String>? address,
     Expression<String>? logo,
+    Expression<String>? licenseKey,
+    Expression<DateTime>? expiryDate,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
@@ -279,6 +347,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       if (phone != null) 'phone': phone,
       if (address != null) 'address': address,
       if (logo != null) 'logo': logo,
+      if (licenseKey != null) 'license_key': licenseKey,
+      if (expiryDate != null) 'expiry_date': expiryDate,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -289,6 +359,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       Value<String?>? phone,
       Value<String?>? address,
       Value<String?>? logo,
+      Value<String?>? licenseKey,
+      Value<DateTime?>? expiryDate,
       Value<DateTime>? createdAt}) {
     return SettingsTableCompanion(
       id: id ?? this.id,
@@ -296,6 +368,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       phone: phone ?? this.phone,
       address: address ?? this.address,
       logo: logo ?? this.logo,
+      licenseKey: licenseKey ?? this.licenseKey,
+      expiryDate: expiryDate ?? this.expiryDate,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -318,6 +392,12 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     if (logo.present) {
       map['logo'] = Variable<String>(logo.value);
     }
+    if (licenseKey.present) {
+      map['license_key'] = Variable<String>(licenseKey.value);
+    }
+    if (expiryDate.present) {
+      map['expiry_date'] = Variable<DateTime>(expiryDate.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -332,6 +412,8 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
           ..write('phone: $phone, ')
           ..write('address: $address, ')
           ..write('logo: $logo, ')
+          ..write('licenseKey: $licenseKey, ')
+          ..write('expiryDate: $expiryDate, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -5144,6 +5226,17 @@ class $InvoicesTableTable extends InvoicesTable
   late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
       'customer_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _carIdMeta = const VerificationMeta('carId');
+  @override
+  late final GeneratedColumn<int> carId = GeneratedColumn<int>(
+      'car_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _currentKmMeta =
+      const VerificationMeta('currentKm');
+  @override
+  late final GeneratedColumn<int> currentKm = GeneratedColumn<int>(
+      'current_km', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _totalMeta = const VerificationMeta('total');
   @override
   late final GeneratedColumn<double> total = GeneratedColumn<double>(
@@ -5200,6 +5293,8 @@ class $InvoicesTableTable extends InvoicesTable
         id,
         invoiceNumber,
         customerId,
+        carId,
+        currentKm,
         total,
         discount,
         tax,
@@ -5234,6 +5329,14 @@ class $InvoicesTableTable extends InvoicesTable
           _customerIdMeta,
           customerId.isAcceptableOrUnknown(
               data['customer_id']!, _customerIdMeta));
+    }
+    if (data.containsKey('car_id')) {
+      context.handle(
+          _carIdMeta, carId.isAcceptableOrUnknown(data['car_id']!, _carIdMeta));
+    }
+    if (data.containsKey('current_km')) {
+      context.handle(_currentKmMeta,
+          currentKm.isAcceptableOrUnknown(data['current_km']!, _currentKmMeta));
     }
     if (data.containsKey('total')) {
       context.handle(
@@ -5282,6 +5385,10 @@ class $InvoicesTableTable extends InvoicesTable
           .read(DriftSqlType.string, data['${effectivePrefix}invoice_number'])!,
       customerId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}customer_id']),
+      carId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}car_id']),
+      currentKm: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}current_km']),
       total: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}total'])!,
       discount: attachedDatabase.typeMapping
@@ -5310,6 +5417,8 @@ class InvoicesTableData extends DataClass
   final int id;
   final String invoiceNumber;
   final int? customerId;
+  final int? carId;
+  final int? currentKm;
   final double total;
   final double discount;
   final double tax;
@@ -5321,6 +5430,8 @@ class InvoicesTableData extends DataClass
       {required this.id,
       required this.invoiceNumber,
       this.customerId,
+      this.carId,
+      this.currentKm,
       required this.total,
       required this.discount,
       required this.tax,
@@ -5335,6 +5446,12 @@ class InvoicesTableData extends DataClass
     map['invoice_number'] = Variable<String>(invoiceNumber);
     if (!nullToAbsent || customerId != null) {
       map['customer_id'] = Variable<int>(customerId);
+    }
+    if (!nullToAbsent || carId != null) {
+      map['car_id'] = Variable<int>(carId);
+    }
+    if (!nullToAbsent || currentKm != null) {
+      map['current_km'] = Variable<int>(currentKm);
     }
     map['total'] = Variable<double>(total);
     map['discount'] = Variable<double>(discount);
@@ -5353,6 +5470,11 @@ class InvoicesTableData extends DataClass
       customerId: customerId == null && nullToAbsent
           ? const Value.absent()
           : Value(customerId),
+      carId:
+          carId == null && nullToAbsent ? const Value.absent() : Value(carId),
+      currentKm: currentKm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currentKm),
       total: Value(total),
       discount: Value(discount),
       tax: Value(tax),
@@ -5370,6 +5492,8 @@ class InvoicesTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       invoiceNumber: serializer.fromJson<String>(json['invoiceNumber']),
       customerId: serializer.fromJson<int?>(json['customerId']),
+      carId: serializer.fromJson<int?>(json['carId']),
+      currentKm: serializer.fromJson<int?>(json['currentKm']),
       total: serializer.fromJson<double>(json['total']),
       discount: serializer.fromJson<double>(json['discount']),
       tax: serializer.fromJson<double>(json['tax']),
@@ -5386,6 +5510,8 @@ class InvoicesTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'invoiceNumber': serializer.toJson<String>(invoiceNumber),
       'customerId': serializer.toJson<int?>(customerId),
+      'carId': serializer.toJson<int?>(carId),
+      'currentKm': serializer.toJson<int?>(currentKm),
       'total': serializer.toJson<double>(total),
       'discount': serializer.toJson<double>(discount),
       'tax': serializer.toJson<double>(tax),
@@ -5400,6 +5526,8 @@ class InvoicesTableData extends DataClass
           {int? id,
           String? invoiceNumber,
           Value<int?> customerId = const Value.absent(),
+          Value<int?> carId = const Value.absent(),
+          Value<int?> currentKm = const Value.absent(),
           double? total,
           double? discount,
           double? tax,
@@ -5411,6 +5539,8 @@ class InvoicesTableData extends DataClass
         id: id ?? this.id,
         invoiceNumber: invoiceNumber ?? this.invoiceNumber,
         customerId: customerId.present ? customerId.value : this.customerId,
+        carId: carId.present ? carId.value : this.carId,
+        currentKm: currentKm.present ? currentKm.value : this.currentKm,
         total: total ?? this.total,
         discount: discount ?? this.discount,
         tax: tax ?? this.tax,
@@ -5427,6 +5557,8 @@ class InvoicesTableData extends DataClass
           : this.invoiceNumber,
       customerId:
           data.customerId.present ? data.customerId.value : this.customerId,
+      carId: data.carId.present ? data.carId.value : this.carId,
+      currentKm: data.currentKm.present ? data.currentKm.value : this.currentKm,
       total: data.total.present ? data.total.value : this.total,
       discount: data.discount.present ? data.discount.value : this.discount,
       tax: data.tax.present ? data.tax.value : this.tax,
@@ -5445,6 +5577,8 @@ class InvoicesTableData extends DataClass
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('customerId: $customerId, ')
+          ..write('carId: $carId, ')
+          ..write('currentKm: $currentKm, ')
           ..write('total: $total, ')
           ..write('discount: $discount, ')
           ..write('tax: $tax, ')
@@ -5457,8 +5591,19 @@ class InvoicesTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, invoiceNumber, customerId, total,
-      discount, tax, paid, remaining, paymentMethod, createdAt);
+  int get hashCode => Object.hash(
+      id,
+      invoiceNumber,
+      customerId,
+      carId,
+      currentKm,
+      total,
+      discount,
+      tax,
+      paid,
+      remaining,
+      paymentMethod,
+      createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5466,6 +5611,8 @@ class InvoicesTableData extends DataClass
           other.id == this.id &&
           other.invoiceNumber == this.invoiceNumber &&
           other.customerId == this.customerId &&
+          other.carId == this.carId &&
+          other.currentKm == this.currentKm &&
           other.total == this.total &&
           other.discount == this.discount &&
           other.tax == this.tax &&
@@ -5479,6 +5626,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
   final Value<int> id;
   final Value<String> invoiceNumber;
   final Value<int?> customerId;
+  final Value<int?> carId;
+  final Value<int?> currentKm;
   final Value<double> total;
   final Value<double> discount;
   final Value<double> tax;
@@ -5490,6 +5639,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
     this.id = const Value.absent(),
     this.invoiceNumber = const Value.absent(),
     this.customerId = const Value.absent(),
+    this.carId = const Value.absent(),
+    this.currentKm = const Value.absent(),
     this.total = const Value.absent(),
     this.discount = const Value.absent(),
     this.tax = const Value.absent(),
@@ -5502,6 +5653,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
     this.id = const Value.absent(),
     required String invoiceNumber,
     this.customerId = const Value.absent(),
+    this.carId = const Value.absent(),
+    this.currentKm = const Value.absent(),
     required double total,
     this.discount = const Value.absent(),
     this.tax = const Value.absent(),
@@ -5515,6 +5668,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
     Expression<int>? id,
     Expression<String>? invoiceNumber,
     Expression<int>? customerId,
+    Expression<int>? carId,
+    Expression<int>? currentKm,
     Expression<double>? total,
     Expression<double>? discount,
     Expression<double>? tax,
@@ -5527,6 +5682,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
       if (id != null) 'id': id,
       if (invoiceNumber != null) 'invoice_number': invoiceNumber,
       if (customerId != null) 'customer_id': customerId,
+      if (carId != null) 'car_id': carId,
+      if (currentKm != null) 'current_km': currentKm,
       if (total != null) 'total': total,
       if (discount != null) 'discount': discount,
       if (tax != null) 'tax': tax,
@@ -5541,6 +5698,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
       {Value<int>? id,
       Value<String>? invoiceNumber,
       Value<int?>? customerId,
+      Value<int?>? carId,
+      Value<int?>? currentKm,
       Value<double>? total,
       Value<double>? discount,
       Value<double>? tax,
@@ -5552,6 +5711,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
       id: id ?? this.id,
       invoiceNumber: invoiceNumber ?? this.invoiceNumber,
       customerId: customerId ?? this.customerId,
+      carId: carId ?? this.carId,
+      currentKm: currentKm ?? this.currentKm,
       total: total ?? this.total,
       discount: discount ?? this.discount,
       tax: tax ?? this.tax,
@@ -5573,6 +5734,12 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
     }
     if (customerId.present) {
       map['customer_id'] = Variable<int>(customerId.value);
+    }
+    if (carId.present) {
+      map['car_id'] = Variable<int>(carId.value);
+    }
+    if (currentKm.present) {
+      map['current_km'] = Variable<int>(currentKm.value);
     }
     if (total.present) {
       map['total'] = Variable<double>(total.value);
@@ -5604,6 +5771,8 @@ class InvoicesTableCompanion extends UpdateCompanion<InvoicesTableData> {
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('customerId: $customerId, ')
+          ..write('carId: $carId, ')
+          ..write('currentKm: $currentKm, ')
           ..write('total: $total, ')
           ..write('discount: $discount, ')
           ..write('tax: $tax, ')
@@ -5976,6 +6145,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $InvoiceItemsTableTable(this);
   late final InvoicesDao invoicesDao = InvoicesDao(this as AppDatabase);
   late final CustomersDao customersDao = CustomersDao(this as AppDatabase);
+  late final CarsDao carsDao = CarsDao(this as AppDatabase);
+  late final ProductsDao productsDao = ProductsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6005,6 +6176,8 @@ typedef $$SettingsTableTableCreateCompanionBuilder = SettingsTableCompanion
   Value<String?> phone,
   Value<String?> address,
   Value<String?> logo,
+  Value<String?> licenseKey,
+  Value<DateTime?> expiryDate,
   Value<DateTime> createdAt,
 });
 typedef $$SettingsTableTableUpdateCompanionBuilder = SettingsTableCompanion
@@ -6014,6 +6187,8 @@ typedef $$SettingsTableTableUpdateCompanionBuilder = SettingsTableCompanion
   Value<String?> phone,
   Value<String?> address,
   Value<String?> logo,
+  Value<String?> licenseKey,
+  Value<DateTime?> expiryDate,
   Value<DateTime> createdAt,
 });
 
@@ -6040,6 +6215,12 @@ class $$SettingsTableTableFilterComposer
 
   ColumnFilters<String> get logo => $composableBuilder(
       column: $table.logo, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get licenseKey => $composableBuilder(
+      column: $table.licenseKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get expiryDate => $composableBuilder(
+      column: $table.expiryDate, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -6069,6 +6250,12 @@ class $$SettingsTableTableOrderingComposer
   ColumnOrderings<String> get logo => $composableBuilder(
       column: $table.logo, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get licenseKey => $composableBuilder(
+      column: $table.licenseKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get expiryDate => $composableBuilder(
+      column: $table.expiryDate, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
@@ -6096,6 +6283,12 @@ class $$SettingsTableTableAnnotationComposer
 
   GeneratedColumn<String> get logo =>
       $composableBuilder(column: $table.logo, builder: (column) => column);
+
+  GeneratedColumn<String> get licenseKey => $composableBuilder(
+      column: $table.licenseKey, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get expiryDate => $composableBuilder(
+      column: $table.expiryDate, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -6132,6 +6325,8 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             Value<String?> phone = const Value.absent(),
             Value<String?> address = const Value.absent(),
             Value<String?> logo = const Value.absent(),
+            Value<String?> licenseKey = const Value.absent(),
+            Value<DateTime?> expiryDate = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
           }) =>
               SettingsTableCompanion(
@@ -6140,6 +6335,8 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             phone: phone,
             address: address,
             logo: logo,
+            licenseKey: licenseKey,
+            expiryDate: expiryDate,
             createdAt: createdAt,
           ),
           createCompanionCallback: ({
@@ -6148,6 +6345,8 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             Value<String?> phone = const Value.absent(),
             Value<String?> address = const Value.absent(),
             Value<String?> logo = const Value.absent(),
+            Value<String?> licenseKey = const Value.absent(),
+            Value<DateTime?> expiryDate = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
           }) =>
               SettingsTableCompanion.insert(
@@ -6156,6 +6355,8 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             phone: phone,
             address: address,
             logo: logo,
+            licenseKey: licenseKey,
+            expiryDate: expiryDate,
             createdAt: createdAt,
           ),
           withReferenceMapper: (p0) => p0
@@ -8603,6 +8804,8 @@ typedef $$InvoicesTableTableCreateCompanionBuilder = InvoicesTableCompanion
   Value<int> id,
   required String invoiceNumber,
   Value<int?> customerId,
+  Value<int?> carId,
+  Value<int?> currentKm,
   required double total,
   Value<double> discount,
   Value<double> tax,
@@ -8616,6 +8819,8 @@ typedef $$InvoicesTableTableUpdateCompanionBuilder = InvoicesTableCompanion
   Value<int> id,
   Value<String> invoiceNumber,
   Value<int?> customerId,
+  Value<int?> carId,
+  Value<int?> currentKm,
   Value<double> total,
   Value<double> discount,
   Value<double> tax,
@@ -8642,6 +8847,12 @@ class $$InvoicesTableTableFilterComposer
 
   ColumnFilters<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get carId => $composableBuilder(
+      column: $table.carId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentKm => $composableBuilder(
+      column: $table.currentKm, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<double> get total => $composableBuilder(
       column: $table.total, builder: (column) => ColumnFilters(column));
@@ -8684,6 +8895,12 @@ class $$InvoicesTableTableOrderingComposer
   ColumnOrderings<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get carId => $composableBuilder(
+      column: $table.carId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentKm => $composableBuilder(
+      column: $table.currentKm, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<double> get total => $composableBuilder(
       column: $table.total, builder: (column) => ColumnOrderings(column));
 
@@ -8724,6 +8941,12 @@ class $$InvoicesTableTableAnnotationComposer
 
   GeneratedColumn<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => column);
+
+  GeneratedColumn<int> get carId =>
+      $composableBuilder(column: $table.carId, builder: (column) => column);
+
+  GeneratedColumn<int> get currentKm =>
+      $composableBuilder(column: $table.currentKm, builder: (column) => column);
 
   GeneratedColumn<double> get total =>
       $composableBuilder(column: $table.total, builder: (column) => column);
@@ -8776,6 +8999,8 @@ class $$InvoicesTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> invoiceNumber = const Value.absent(),
             Value<int?> customerId = const Value.absent(),
+            Value<int?> carId = const Value.absent(),
+            Value<int?> currentKm = const Value.absent(),
             Value<double> total = const Value.absent(),
             Value<double> discount = const Value.absent(),
             Value<double> tax = const Value.absent(),
@@ -8788,6 +9013,8 @@ class $$InvoicesTableTableTableManager extends RootTableManager<
             id: id,
             invoiceNumber: invoiceNumber,
             customerId: customerId,
+            carId: carId,
+            currentKm: currentKm,
             total: total,
             discount: discount,
             tax: tax,
@@ -8800,6 +9027,8 @@ class $$InvoicesTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String invoiceNumber,
             Value<int?> customerId = const Value.absent(),
+            Value<int?> carId = const Value.absent(),
+            Value<int?> currentKm = const Value.absent(),
             required double total,
             Value<double> discount = const Value.absent(),
             Value<double> tax = const Value.absent(),
@@ -8812,6 +9041,8 @@ class $$InvoicesTableTableTableManager extends RootTableManager<
             id: id,
             invoiceNumber: invoiceNumber,
             customerId: customerId,
+            carId: carId,
+            currentKm: currentKm,
             total: total,
             discount: discount,
             tax: tax,

@@ -11,33 +11,63 @@ import '../../customers/controller/customers_controller.dart';
 
 
 
-class NewInvoiceScreen extends ConsumerStatefulWidget {
+import '../../cars/controller/cars_controller.dart';
 
+import '../../../core/services/print_service.dart';
+
+class NewInvoiceScreen extends ConsumerStatefulWidget {
   const NewInvoiceScreen({
     super.key,
   });
 
-
   @override
   ConsumerState<NewInvoiceScreen> createState() =>
       _NewInvoiceScreenState();
-
 }
-
-
 
 class _NewInvoiceScreenState
     extends ConsumerState<NewInvoiceScreen> {
-
-
   final searchController =
       TextEditingController();
-
-
+  final kmController = TextEditingController();
   final List<CartItem> cart = [];
-
-
   int? selectedCustomerId;
+  int? selectedCarId;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(customersControllerProvider.notifier).loadCustomers();
+      ref.read(carsControllerProvider.notifier).loadCars();
+    });
+  }
+
+  void _onCarSelected(int? carId) {
+    setState(() {
+      selectedCarId = carId;
+      if (carId != null) {
+        final cars = ref.read(carsControllerProvider);
+        final car = cars.firstWhere((c) => c.id == carId);
+        kmController.text = (car.currentKm ?? 0).toString();
+      } else {
+        kmController.text = "";
+      }
+    });
+  }
+
+  void _addToCart(ProductsTableData product) {
+    setState(() {
+      final oldIndex = cart.indexWhere(
+        (item) => item.product.id == product.id,
+      );
+      if (oldIndex >= 0) {
+        cart[oldIndex].quantity++;
+      } else {
+        cart.add(CartItem(product: product, quantity: 1));
+      }
+    });
+  }
 
 
 
@@ -47,103 +77,81 @@ class _NewInvoiceScreenState
 
     final products =
         ref.watch(productsControllerProvider);
-
-
     final customers =
         ref.watch(customersControllerProvider);
-
-
+    final allCars = ref.watch(carsControllerProvider);
+    final customerCars = allCars.where((c) => c.customerId == selectedCustomerId).toList();
 
     return ScaffoldPage(
-
       header: const PageHeader(
-
-        title: Text(
-          "فاتورة بيع جديدة",
-        ),
-
+        title: Text("فاتورة بيع جديدة"),
       ),
-
-
-
       content: Column(
-
         children: [
-
-
-          ComboBox<int>(
-
-            placeholder:
-            const Text(
-              "اختر العميل",
-            ),
-
-
-            value:
-            selectedCustomerId,
-
-
-            items:
-            customers.map((customer){
-
-              return ComboBoxItem<int>(
-
-                value:
-                customer.id,
-
-
-                child:
-                Text(
-                  customer.name,
+          Row(
+            children: [
+              Expanded(
+                child: ComboBox<int>(
+                  placeholder: const Text("اختر العميل"),
+                  value: selectedCustomerId,
+                  items: customers.map((customer) {
+                    return ComboBoxItem<int>(
+                      value: customer.id,
+                      child: Text(customer.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCustomerId = value;
+                      selectedCarId = null;
+                    });
+                  },
                 ),
-
-              );
-
-            }).toList(),
-
-
-
-            onChanged: (value){
-
-              setState(() {
-
-                selectedCustomerId =
-                    value;
-
-              });
-
-            },
-
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ComboBox<int>(
+                  placeholder: const Text("اختر السيارة"),
+                  value: selectedCarId,
+                  items: customerCars.map((car) {
+                    return ComboBoxItem<int>(
+                      value: car.id,
+                      child: Text("${car.plateNumber} - ${car.brand ?? ''}"),
+                    );
+                  }).toList(),
+                  onChanged: _onCarSelected,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextBox(
+                  controller: kmController,
+                  placeholder: "عداد السيارة الحالي",
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
           ),
-
-
-
-          const SizedBox(
-            height: 10,
-          ),
-
-
-
+          const SizedBox(height: 10),
           TextBox(
-
-            controller:
-            searchController,
-
-
-            placeholder:
-            "بحث عن منتج...",
-
-
-            onChanged: (value){
-
-              ref
-                  .read(
-                productsControllerProvider.notifier,
-              )
-                  .search(value);
-
+            controller: searchController,
+            placeholder: "بحث عن منتج (أو امسح الباركود)...",
+            autofocus: true,
+            onSubmitted: (value) {
+              if (value.isEmpty) return;
+              try {
+                final product = products.firstWhere(
+                  (p) => p.barcode == value || p.nameAr == value,
+                );
+                _addToCart(product);
+                searchController.clear();
+              } catch (e) {
+                // Product not found, do nothing or show error
+              }
             },
-
+            onChanged: (value) {
+              ref.read(productsControllerProvider.notifier).search(value);
+            },
           ),
 
 
@@ -208,51 +216,7 @@ class _NewInvoiceScreenState
 
 
 
-                            onPressed: (){
-
-
-                              setState((){
-
-
-                                final oldIndex =
-                                cart.indexWhere(
-                                      (item)=>
-                                  item.product.id ==
-                                      product.id,
-                                );
-
-
-
-                                if(oldIndex >= 0){
-
-                                  cart[oldIndex]
-                                      .quantity++;
-
-                                }
-
-                                else{
-
-                                  cart.add(
-
-                                    CartItem(
-
-                                      product:
-                                      product,
-
-                                      quantity:
-                                      1,
-
-                                    ),
-
-                                  );
-
-                                }
-
-
-                              });
-
-
-                            },
+                            onPressed: () => _addToCart(product),
 
                           ),
 
@@ -372,87 +336,49 @@ class _NewInvoiceScreenState
 
 
                           onPressed: () async {
+                            if (cart.isEmpty) return;
 
-
-                            if(cart.isEmpty){
-
-                              return;
-
-                            }
-
-
-
-                            final total =
-                            cart.fold<double>(
-
+                            final total = cart.fold<double>(
                               0,
-
-                                  (sum,item)=>
-                              sum + item.total,
-
+                              (sum, item) => sum + item.total,
                             );
 
-
-
-                            await ref
+                            final invoiceNumber = await ref
                                 .read(
                               invoicesControllerProvider.notifier,
                             )
                                 .saveInvoice(
-
-
-                              total:
-                              total,
-
-
-                              items:
-                              cart,
-
-
-                              customerId:
-                              selectedCustomerId,
-
-
+                              total: total,
+                              items: cart,
+                              customerId: selectedCustomerId,
+                              carId: selectedCarId,
+                              currentKm: int.tryParse(kmController.text),
                             );
 
-
-
-                            setState((){
-
-                              cart.clear();
-
-                              selectedCustomerId =
-                              null;
-
-                            });
-
-
-
-                            displayInfoBar(
-
-                              context,
-
-                              builder:
-                                  (context,close){
-
-                                return InfoBar(
-
-                                  title:
-                                  const Text(
-                                    "تم حفظ الفاتورة",
-                                  ),
-
-
-                                  severity:
-                                  InfoBarSeverity.success,
-
-                                );
-
-                              },
-
+                            // Print the receipt
+                            await PrintService.printReceipt(
+                              items: List.from(cart),
+                              total: total,
+                              invoiceNumber: invoiceNumber,
                             );
 
+                            if (mounted) {
+                              setState(() {
+                                cart.clear();
+                                selectedCustomerId = null;
+                                selectedCarId = null;
+                              });
 
+                              displayInfoBar(
+                                context,
+                                builder: (context, close) {
+                                  return const InfoBar(
+                                    title: Text("تم حفظ الفاتورة وطباعتها"),
+                                    severity: InfoBarSeverity.success,
+                                  );
+                                },
+                              );
+                            }
                           },
 
                         )

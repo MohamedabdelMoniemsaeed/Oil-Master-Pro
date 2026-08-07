@@ -1,292 +1,69 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../dashboard/screens/dashboard_screen.dart';
 import '../controller/auth_controller.dart';
-
+import '../../dashboard/screens/dashboard_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-
-  const LoginScreen({
-    super.key,
-  });
-
+  const LoginScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() =>
-      _LoginScreenState();
-
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-
-
-class _LoginScreenState
-    extends ConsumerState<LoginScreen> {
-
-
-  final usernameController =
-      TextEditingController();
-
-
-  final passwordController =
-      TextEditingController();
-
-
-
-  bool loading = false;
-
-
-
-  Future<void> login() async {
-
-
-    setState(() {
-      loading = true;
-    });
-
-
-    final result =
-        await ref
-            .read(
-              authControllerProvider.notifier,
-            )
-            .login(
-              usernameController.text.trim(),
-              passwordController.text.trim(),
-            );
-
-
-
-    setState(() {
-      loading = false;
-    });
-
-
-
-    if (!mounted) return;
-
-
-
-    if (result) {
-
-
-      displayInfoBar(
-        context,
-
-        builder: (context, close) {
-
-          return const InfoBar(
-            title: Text(
-              "تم تسجيل الدخول",
-            ),
-
-            content: Text(
-              "مرحباً بك في OilMaster Pro",
-            ),
-
-            severity:
-                InfoBarSeverity.success,
-
-          );
-
-        },
-
-      );
-
-
-      Navigator.pushReplacement(
-  context,
-  FluentPageRoute(
-    builder: (_) =>
-        const DashboardScreen(),
-  ),
-);
-      // بعد إنشاء صفحة Dashboard
-
-
-    } else {
-
-
-      displayInfoBar(
-        context,
-
-        builder: (context, close) {
-
-          return const InfoBar(
-
-            title:
-                Text("خطأ"),
-
-            content:
-                Text(
-                  "اسم المستخدم أو كلمة المرور غير صحيحة",
-                ),
-
-            severity:
-                InfoBarSeverity.error,
-
-          );
-
-        },
-
-      );
-
-
-    }
-
-  }
-
-
-
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final userController = TextEditingController();
+  final passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
+    final state = ref.watch(authControllerProvider);
 
     return NavigationView(
-
-      content: ScaffoldPage(
-
-        content: Center(
-
-
-          child: SizedBox(
-
-            width: 380,
-
-
-            child: Column(
-
-              mainAxisAlignment:
-                  MainAxisAlignment.center,
-
-
-              children: [
-
-
-
-                const Text(
-
-                  "OilMaster Pro",
-
-                  style: TextStyle(
-
-                    fontSize: 35,
-
-                    fontWeight:
-                        FontWeight.bold,
-
+      content: Center(
+        child: Container(
+          width: 400,
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("OilMaster Pro - دخول", 
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 30),
+                  TextBox(
+                    controller: userController,
+                    placeholder: "اسم المستخدم",
+                    prefix: Padding(padding: EdgeInsets.all(8.0), child: Icon(FluentIcons.contact)),
                   ),
-
-                ),
-
-
-
-                const SizedBox(
-                  height: 40,
-                ),
-
-
-
-                TextBox(
-
-                  controller:
-                      usernameController,
-
-                  placeholder:
-                      "اسم المستخدم",
-
-                  prefix:
-                      const Icon(
-                        FluentIcons
-                            .contact,
-                      ),
-
-                ),
-
-
-
-                const SizedBox(
-                  height: 15,
-                ),
-
-
-
-                PasswordBox(
-
-                  controller:
-                      passwordController,
-
-                  placeholder:
-                      "كلمة المرور",
-
-                ),
-
-
-
-                const SizedBox(
-                  height: 25,
-                ),
-
-
-
-
-                SizedBox(
-
-                  width: double.infinity,
-
-
-                  child: FilledButton(
-
-                    onPressed:
-
-                    loading
-
-                    ? null
-
-                    : login,
-
-                    child: Text(
-
-                      loading
-
-                      ? "جاري الدخول..."
-
-                      : "دخول",
-
+                  const SizedBox(height: 15),
+                  PasswordBox(
+                    controller: passController,
+                    placeholder: "كلمة المرور",
+                  ),
+                  const SizedBox(height: 30),
+                  if (state.error != null) 
+                    Text(state.error!, style: TextStyle(color: Colors.red)),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      child: state.isLoading ? const ProgressRing() : const Text("تسجيل الدخول"),
+                      onPressed: () async {
+                        final success = await ref.read(authControllerProvider.notifier)
+                            .login(userController.text, passController.text);
+                        if (success) {
+                          Navigator.pushReplacement(context, FluentPageRoute(builder: (_) => const DashboardScreen()));
+                        }
+                      },
                     ),
-
-
                   ),
-
-                ),
-
-
-              ],
-
+                ],
+              ),
             ),
-
           ),
-
-
         ),
-
       ),
-
     );
-
   }
-
-
-
-  @override
-  void dispose() {
-
-    usernameController.dispose();
-
-    passwordController.dispose();
-
-    super.dispose();
-
-  }
-
 }

@@ -1,12 +1,16 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 
-import '../../../core/service_locator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../database/database.dart';
 import '../../../repositories/settings_repository.dart';
 
 
+
+import '../../../core/services/backup_service.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
 
@@ -29,126 +33,64 @@ class _SettingsScreenState
 
   final shopName =
       TextEditingController();
-
-
   final phone =
       TextEditingController();
-
-
   final address =
       TextEditingController();
-
-
+  String? logoPath;
 
   final repository =
       getIt<SettingsRepository>();
 
-
-
   @override
   void initState() {
-
     super.initState();
-
     loadSettings();
-
   }
-
-
 
   Future<void> loadSettings() async {
-
-
     final data =
         await repository.getSettings();
-
-
     if(data != null){
-
-      shopName.text =
-          data.shopName;
-
-
-      phone.text =
-          data.phone ?? "";
-
-
-      address.text =
-          data.address ?? "";
-
+      shopName.text = data.shopName;
+      phone.text = data.phone ?? "";
+      address.text = data.address ?? "";
+      setState(() {
+        logoPath = data.logo;
+      });
     }
-
-
   }
 
-
-
-
+  Future<void> pickLogo() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null) {
+      setState(() {
+        logoPath = result.files.single.path;
+      });
+    }
+  }
 
   Future<void> save() async {
-
-
     final old =
         await repository.getSettings();
-
-
-
     if(old == null){
-
-
       await repository.saveSettings(
-
         SettingsTableCompanion(
-
-          shopName:
-          Value(
-            shopName.text,
-          ),
-
-
-          phone:
-          Value(
-            phone.text,
-          ),
-
-
-          address:
-          Value(
-            address.text,
-          ),
-
+          shopName: Value(shopName.text),
+          phone: Value(phone.text),
+          address: Value(address.text),
+          logo: Value(logoPath),
         ),
-
       );
-
-
     }else{
-
-
       await repository.updateSettings(
-
         old.copyWith(
-
-          shopName:
-          shopName.text,
-
-
-          phone:
-          Value(
-            phone.text,
-          ),
-
-
-          address:
-          Value(
-            address.text,
-          ),
-
+          shopName: shopName.text,
+          phone: Value(phone.text),
+          address: Value(address.text),
+          logo: Value(logoPath),
         ),
-
       );
-
-
     }
 
 
@@ -242,46 +184,64 @@ class _SettingsScreenState
 
 
           TextBox(
-
-            controller:
-            address,
-
-            placeholder:
-            "العنوان",
-
+            controller: address,
+            placeholder: "العنوان",
           ),
-
-
-
-          const SizedBox(
-            height: 20,
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              if (logoPath != null)
+                Image.file(File(logoPath!), width: 100, height: 100),
+              const SizedBox(width: 10),
+              Button(
+                child: const Text("اختيار شعار المحل"),
+                onPressed: pickLogo,
+              ),
+            ],
           ),
-
-
-
-
+          const SizedBox(height: 20),
           FilledButton(
-
-            child:
-            const Text(
-              "حفظ",
-            ),
-
-
-            onPressed:
-            save,
-
+            child: const Text("حفظ"),
+            onPressed: save,
           ),
-
-
+          const SizedBox(height: 40),
+          const Text("النسخ الاحتياطي",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Button(
+                child: const Text("إنشاء نسخة احتياطية"),
+                onPressed: () async {
+                  final success = await BackupService.createBackup();
+                  if (success) {
+                    displayInfoBar(context, builder: (_, close) {
+                      return const InfoBar(
+                          title: Text("تم إنشاء النسخة الاحتياطية بنجاح"),
+                          severity: InfoBarSeverity.success);
+                    });
+                  }
+                },
+              ),
+              const SizedBox(width: 10),
+              Button(
+                child: const Text("استعادة نسخة احتياطية"),
+                onPressed: () async {
+                  final success = await BackupService.restoreBackup();
+                  if (success) {
+                    displayInfoBar(context, builder: (_, close) {
+                      return const InfoBar(
+                          title: Text("تمت الاستعادة بنجاح. يرجى إعادة تشغيل البرنامج."),
+                          severity: InfoBarSeverity.warning);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
         ],
-
       ),
-
-
     );
-
-
   }
 
 

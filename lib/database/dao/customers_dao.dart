@@ -1,10 +1,9 @@
 import 'package:drift/drift.dart';
 
 import '../database.dart';
-
+import '../tables/customers_table.dart';
 
 part 'customers_dao.g.dart';
-
 
 @DriftAccessor(
   tables: [CustomersTable],
@@ -22,7 +21,13 @@ class CustomersDao extends DatabaseAccessor<AppDatabase>
 
     return select(customersTable).get();
 
+    Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
   }
+}
 
 
 
@@ -33,7 +38,13 @@ class CustomersDao extends DatabaseAccessor<AppDatabase>
     return into(customersTable)
         .insert(customer);
 
+    Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
   }
+}
 
 
 
@@ -44,7 +55,13 @@ class CustomersDao extends DatabaseAccessor<AppDatabase>
     return update(customersTable)
         .replace(customer);
 
+    Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
   }
+}
 
 
 
@@ -58,7 +75,13 @@ class CustomersDao extends DatabaseAccessor<AppDatabase>
       ))
       .go();
 
+    Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
   }
+}
 
 
 
@@ -74,6 +97,18 @@ class CustomersDao extends DatabaseAccessor<AppDatabase>
       ))
       .get();
 
+    Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
   }
+}
 
+  Future<int> getCustomersCount() async {
+    final countExp = customersTable.id.count();
+    final query = selectOnly(customersTable)..addColumns([countExp]);
+    final result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
+  }
 }

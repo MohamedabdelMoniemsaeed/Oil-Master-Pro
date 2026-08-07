@@ -18,14 +18,22 @@ class InvoicesRepository {
     return dao.addInvoiceItem(item);
   }
 
-  Future<List<Invoice>> getInvoices() {
+  Future<List<InvoicesTableData>> getInvoices() {
     return dao.getInvoices();
   }
 
-  Future<List<InvoiceItem>> getInvoiceItems(
+  Future<List<InvoiceItemsTableData>> getInvoiceItems(
     int invoiceId,
   ) {
     return dao.getInvoiceItems(invoiceId);
+  }
+
+  Future<double> getTodaySales() {
+    return dao.getTodaySales();
+  }
+
+  Future<double> getTodayProfit() {
+    return dao.getTodayProfit();
   }
 
   Future<int> deleteInvoice(
