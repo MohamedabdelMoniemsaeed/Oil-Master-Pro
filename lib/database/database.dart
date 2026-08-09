@@ -51,7 +51,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3; // تم رفع الإصدار للتعامل مع أي تحديثات قادمة
 
   @override
   MigrationStrategy get migration {
@@ -60,14 +60,24 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (m, from, to) async {
+        // إدارة التحديثات من نسخة لنسخة بدون مسح البيانات
         if (from < 2) {
-          // Add columns added in version 2
-          await m.addColumn(invoicesTable, invoicesTable.carId);
-          await m.addColumn(invoicesTable, invoicesTable.currentKm);
-          await m.addColumn(settingsTable, settingsTable.logo);
-          await m.addColumn(settingsTable, settingsTable.licenseKey);
-          await m.addColumn(settingsTable, settingsTable.expiryDate);
+          try { await m.addColumn(invoicesTable, invoicesTable.carId); } catch (e) {}
+          try { await m.addColumn(invoicesTable, invoicesTable.currentKm); } catch (e) {}
+          try { await m.addColumn(settingsTable, settingsTable.logo); } catch (e) {}
+          try { await m.addColumn(settingsTable, settingsTable.licenseKey); } catch (e) {}
+          try { await m.addColumn(settingsTable, settingsTable.expiryDate); } catch (e) {}
         }
+        
+        if (from < 3) {
+          try { await m.addColumn(settingsTable, settingsTable.language); } catch (e) {}
+          try { await m.addColumn(settingsTable, settingsTable.currency); } catch (e) {}
+          try { await m.addColumn(settingsTable, settingsTable.isFirstRun); } catch (e) {}
+        }
+      },
+      beforeOpen: (details) async {
+        // تفعيل القيود الخارجية (Foreign Keys)
+        await customStatement('PRAGMA foreign_keys = ON');
       },
     );
   }

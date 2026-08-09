@@ -257,8 +257,8 @@ Future<void> setupServiceLocator() async {
 
 
 
-  getIt.registerLazySingleton<AppStartService>(
-    () => AppStartService(
+  getIt.registerLazySingleton<StartupService>(
+    () => StartupService(
       getIt<SettingsRepository>(),
     ),
   );

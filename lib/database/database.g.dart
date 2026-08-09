@@ -42,6 +42,32 @@ class $SettingsTableTable extends SettingsTable
   late final GeneratedColumn<String> logo = GeneratedColumn<String>(
       'logo', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _languageMeta =
+      const VerificationMeta('language');
+  @override
+  late final GeneratedColumn<String> language = GeneratedColumn<String>(
+      'language', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant("ar"));
+  static const VerificationMeta _currencyMeta =
+      const VerificationMeta('currency');
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+      'currency', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant("EGP"));
+  static const VerificationMeta _isFirstRunMeta =
+      const VerificationMeta('isFirstRun');
+  @override
+  late final GeneratedColumn<bool> isFirstRun = GeneratedColumn<bool>(
+      'is_first_run', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_first_run" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _licenseKeyMeta =
       const VerificationMeta('licenseKey');
   @override
@@ -63,8 +89,19 @@ class $SettingsTableTable extends SettingsTable
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, shopName, phone, address, logo, licenseKey, expiryDate, createdAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        shopName,
+        phone,
+        address,
+        logo,
+        language,
+        currency,
+        isFirstRun,
+        licenseKey,
+        expiryDate,
+        createdAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -93,6 +130,20 @@ class $SettingsTableTable extends SettingsTable
     if (data.containsKey('logo')) {
       context.handle(
           _logoMeta, logo.isAcceptableOrUnknown(data['logo']!, _logoMeta));
+    }
+    if (data.containsKey('language')) {
+      context.handle(_languageMeta,
+          language.isAcceptableOrUnknown(data['language']!, _languageMeta));
+    }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
+    }
+    if (data.containsKey('is_first_run')) {
+      context.handle(
+          _isFirstRunMeta,
+          isFirstRun.isAcceptableOrUnknown(
+              data['is_first_run']!, _isFirstRunMeta));
     }
     if (data.containsKey('license_key')) {
       context.handle(
@@ -129,6 +180,12 @@ class $SettingsTableTable extends SettingsTable
           .read(DriftSqlType.string, data['${effectivePrefix}address']),
       logo: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}logo']),
+      language: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}language'])!,
+      currency: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency'])!,
+      isFirstRun: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_first_run'])!,
       licenseKey: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}license_key']),
       expiryDate: attachedDatabase.typeMapping
@@ -151,6 +208,9 @@ class SettingsTableData extends DataClass
   final String? phone;
   final String? address;
   final String? logo;
+  final String language;
+  final String currency;
+  final bool isFirstRun;
   final String? licenseKey;
   final DateTime? expiryDate;
   final DateTime createdAt;
@@ -160,6 +220,9 @@ class SettingsTableData extends DataClass
       this.phone,
       this.address,
       this.logo,
+      required this.language,
+      required this.currency,
+      required this.isFirstRun,
       this.licenseKey,
       this.expiryDate,
       required this.createdAt});
@@ -177,6 +240,9 @@ class SettingsTableData extends DataClass
     if (!nullToAbsent || logo != null) {
       map['logo'] = Variable<String>(logo);
     }
+    map['language'] = Variable<String>(language);
+    map['currency'] = Variable<String>(currency);
+    map['is_first_run'] = Variable<bool>(isFirstRun);
     if (!nullToAbsent || licenseKey != null) {
       map['license_key'] = Variable<String>(licenseKey);
     }
@@ -197,6 +263,9 @@ class SettingsTableData extends DataClass
           ? const Value.absent()
           : Value(address),
       logo: logo == null && nullToAbsent ? const Value.absent() : Value(logo),
+      language: Value(language),
+      currency: Value(currency),
+      isFirstRun: Value(isFirstRun),
       licenseKey: licenseKey == null && nullToAbsent
           ? const Value.absent()
           : Value(licenseKey),
@@ -216,6 +285,9 @@ class SettingsTableData extends DataClass
       phone: serializer.fromJson<String?>(json['phone']),
       address: serializer.fromJson<String?>(json['address']),
       logo: serializer.fromJson<String?>(json['logo']),
+      language: serializer.fromJson<String>(json['language']),
+      currency: serializer.fromJson<String>(json['currency']),
+      isFirstRun: serializer.fromJson<bool>(json['isFirstRun']),
       licenseKey: serializer.fromJson<String?>(json['licenseKey']),
       expiryDate: serializer.fromJson<DateTime?>(json['expiryDate']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -230,6 +302,9 @@ class SettingsTableData extends DataClass
       'phone': serializer.toJson<String?>(phone),
       'address': serializer.toJson<String?>(address),
       'logo': serializer.toJson<String?>(logo),
+      'language': serializer.toJson<String>(language),
+      'currency': serializer.toJson<String>(currency),
+      'isFirstRun': serializer.toJson<bool>(isFirstRun),
       'licenseKey': serializer.toJson<String?>(licenseKey),
       'expiryDate': serializer.toJson<DateTime?>(expiryDate),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -242,6 +317,9 @@ class SettingsTableData extends DataClass
           Value<String?> phone = const Value.absent(),
           Value<String?> address = const Value.absent(),
           Value<String?> logo = const Value.absent(),
+          String? language,
+          String? currency,
+          bool? isFirstRun,
           Value<String?> licenseKey = const Value.absent(),
           Value<DateTime?> expiryDate = const Value.absent(),
           DateTime? createdAt}) =>
@@ -251,6 +329,9 @@ class SettingsTableData extends DataClass
         phone: phone.present ? phone.value : this.phone,
         address: address.present ? address.value : this.address,
         logo: logo.present ? logo.value : this.logo,
+        language: language ?? this.language,
+        currency: currency ?? this.currency,
+        isFirstRun: isFirstRun ?? this.isFirstRun,
         licenseKey: licenseKey.present ? licenseKey.value : this.licenseKey,
         expiryDate: expiryDate.present ? expiryDate.value : this.expiryDate,
         createdAt: createdAt ?? this.createdAt,
@@ -262,6 +343,10 @@ class SettingsTableData extends DataClass
       phone: data.phone.present ? data.phone.value : this.phone,
       address: data.address.present ? data.address.value : this.address,
       logo: data.logo.present ? data.logo.value : this.logo,
+      language: data.language.present ? data.language.value : this.language,
+      currency: data.currency.present ? data.currency.value : this.currency,
+      isFirstRun:
+          data.isFirstRun.present ? data.isFirstRun.value : this.isFirstRun,
       licenseKey:
           data.licenseKey.present ? data.licenseKey.value : this.licenseKey,
       expiryDate:
@@ -278,6 +363,9 @@ class SettingsTableData extends DataClass
           ..write('phone: $phone, ')
           ..write('address: $address, ')
           ..write('logo: $logo, ')
+          ..write('language: $language, ')
+          ..write('currency: $currency, ')
+          ..write('isFirstRun: $isFirstRun, ')
           ..write('licenseKey: $licenseKey, ')
           ..write('expiryDate: $expiryDate, ')
           ..write('createdAt: $createdAt')
@@ -286,8 +374,8 @@ class SettingsTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, shopName, phone, address, logo, licenseKey, expiryDate, createdAt);
+  int get hashCode => Object.hash(id, shopName, phone, address, logo, language,
+      currency, isFirstRun, licenseKey, expiryDate, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -297,6 +385,9 @@ class SettingsTableData extends DataClass
           other.phone == this.phone &&
           other.address == this.address &&
           other.logo == this.logo &&
+          other.language == this.language &&
+          other.currency == this.currency &&
+          other.isFirstRun == this.isFirstRun &&
           other.licenseKey == this.licenseKey &&
           other.expiryDate == this.expiryDate &&
           other.createdAt == this.createdAt);
@@ -308,6 +399,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
   final Value<String?> phone;
   final Value<String?> address;
   final Value<String?> logo;
+  final Value<String> language;
+  final Value<String> currency;
+  final Value<bool> isFirstRun;
   final Value<String?> licenseKey;
   final Value<DateTime?> expiryDate;
   final Value<DateTime> createdAt;
@@ -317,6 +411,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     this.phone = const Value.absent(),
     this.address = const Value.absent(),
     this.logo = const Value.absent(),
+    this.language = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.isFirstRun = const Value.absent(),
     this.licenseKey = const Value.absent(),
     this.expiryDate = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -327,6 +424,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     this.phone = const Value.absent(),
     this.address = const Value.absent(),
     this.logo = const Value.absent(),
+    this.language = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.isFirstRun = const Value.absent(),
     this.licenseKey = const Value.absent(),
     this.expiryDate = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -337,6 +437,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     Expression<String>? phone,
     Expression<String>? address,
     Expression<String>? logo,
+    Expression<String>? language,
+    Expression<String>? currency,
+    Expression<bool>? isFirstRun,
     Expression<String>? licenseKey,
     Expression<DateTime>? expiryDate,
     Expression<DateTime>? createdAt,
@@ -347,6 +450,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       if (phone != null) 'phone': phone,
       if (address != null) 'address': address,
       if (logo != null) 'logo': logo,
+      if (language != null) 'language': language,
+      if (currency != null) 'currency': currency,
+      if (isFirstRun != null) 'is_first_run': isFirstRun,
       if (licenseKey != null) 'license_key': licenseKey,
       if (expiryDate != null) 'expiry_date': expiryDate,
       if (createdAt != null) 'created_at': createdAt,
@@ -359,6 +465,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       Value<String?>? phone,
       Value<String?>? address,
       Value<String?>? logo,
+      Value<String>? language,
+      Value<String>? currency,
+      Value<bool>? isFirstRun,
       Value<String?>? licenseKey,
       Value<DateTime?>? expiryDate,
       Value<DateTime>? createdAt}) {
@@ -368,6 +477,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
       phone: phone ?? this.phone,
       address: address ?? this.address,
       logo: logo ?? this.logo,
+      language: language ?? this.language,
+      currency: currency ?? this.currency,
+      isFirstRun: isFirstRun ?? this.isFirstRun,
       licenseKey: licenseKey ?? this.licenseKey,
       expiryDate: expiryDate ?? this.expiryDate,
       createdAt: createdAt ?? this.createdAt,
@@ -392,6 +504,15 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
     if (logo.present) {
       map['logo'] = Variable<String>(logo.value);
     }
+    if (language.present) {
+      map['language'] = Variable<String>(language.value);
+    }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
+    if (isFirstRun.present) {
+      map['is_first_run'] = Variable<bool>(isFirstRun.value);
+    }
     if (licenseKey.present) {
       map['license_key'] = Variable<String>(licenseKey.value);
     }
@@ -412,6 +533,9 @@ class SettingsTableCompanion extends UpdateCompanion<SettingsTableData> {
           ..write('phone: $phone, ')
           ..write('address: $address, ')
           ..write('logo: $logo, ')
+          ..write('language: $language, ')
+          ..write('currency: $currency, ')
+          ..write('isFirstRun: $isFirstRun, ')
           ..write('licenseKey: $licenseKey, ')
           ..write('expiryDate: $expiryDate, ')
           ..write('createdAt: $createdAt')
@@ -6176,6 +6300,9 @@ typedef $$SettingsTableTableCreateCompanionBuilder = SettingsTableCompanion
   Value<String?> phone,
   Value<String?> address,
   Value<String?> logo,
+  Value<String> language,
+  Value<String> currency,
+  Value<bool> isFirstRun,
   Value<String?> licenseKey,
   Value<DateTime?> expiryDate,
   Value<DateTime> createdAt,
@@ -6187,6 +6314,9 @@ typedef $$SettingsTableTableUpdateCompanionBuilder = SettingsTableCompanion
   Value<String?> phone,
   Value<String?> address,
   Value<String?> logo,
+  Value<String> language,
+  Value<String> currency,
+  Value<bool> isFirstRun,
   Value<String?> licenseKey,
   Value<DateTime?> expiryDate,
   Value<DateTime> createdAt,
@@ -6215,6 +6345,15 @@ class $$SettingsTableTableFilterComposer
 
   ColumnFilters<String> get logo => $composableBuilder(
       column: $table.logo, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get language => $composableBuilder(
+      column: $table.language, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isFirstRun => $composableBuilder(
+      column: $table.isFirstRun, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get licenseKey => $composableBuilder(
       column: $table.licenseKey, builder: (column) => ColumnFilters(column));
@@ -6250,6 +6389,15 @@ class $$SettingsTableTableOrderingComposer
   ColumnOrderings<String> get logo => $composableBuilder(
       column: $table.logo, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get language => $composableBuilder(
+      column: $table.language, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get currency => $composableBuilder(
+      column: $table.currency, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isFirstRun => $composableBuilder(
+      column: $table.isFirstRun, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get licenseKey => $composableBuilder(
       column: $table.licenseKey, builder: (column) => ColumnOrderings(column));
 
@@ -6283,6 +6431,15 @@ class $$SettingsTableTableAnnotationComposer
 
   GeneratedColumn<String> get logo =>
       $composableBuilder(column: $table.logo, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get currency =>
+      $composableBuilder(column: $table.currency, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFirstRun => $composableBuilder(
+      column: $table.isFirstRun, builder: (column) => column);
 
   GeneratedColumn<String> get licenseKey => $composableBuilder(
       column: $table.licenseKey, builder: (column) => column);
@@ -6325,6 +6482,9 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             Value<String?> phone = const Value.absent(),
             Value<String?> address = const Value.absent(),
             Value<String?> logo = const Value.absent(),
+            Value<String> language = const Value.absent(),
+            Value<String> currency = const Value.absent(),
+            Value<bool> isFirstRun = const Value.absent(),
             Value<String?> licenseKey = const Value.absent(),
             Value<DateTime?> expiryDate = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
@@ -6335,6 +6495,9 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             phone: phone,
             address: address,
             logo: logo,
+            language: language,
+            currency: currency,
+            isFirstRun: isFirstRun,
             licenseKey: licenseKey,
             expiryDate: expiryDate,
             createdAt: createdAt,
@@ -6345,6 +6508,9 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             Value<String?> phone = const Value.absent(),
             Value<String?> address = const Value.absent(),
             Value<String?> logo = const Value.absent(),
+            Value<String> language = const Value.absent(),
+            Value<String> currency = const Value.absent(),
+            Value<bool> isFirstRun = const Value.absent(),
             Value<String?> licenseKey = const Value.absent(),
             Value<DateTime?> expiryDate = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
@@ -6355,6 +6521,9 @@ class $$SettingsTableTableTableManager extends RootTableManager<
             phone: phone,
             address: address,
             logo: logo,
+            language: language,
+            currency: currency,
+            isFirstRun: isFirstRun,
             licenseKey: licenseKey,
             expiryDate: expiryDate,
             createdAt: createdAt,

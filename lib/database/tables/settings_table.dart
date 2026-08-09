@@ -29,6 +29,15 @@ class SettingsTable extends Table {
   TextColumn get logo =>
       text().nullable()();
 
+  TextColumn get language =>
+      text().withDefault(const Constant("ar"))();
+
+  TextColumn get currency =>
+      text().withDefault(const Constant("EGP"))();
+
+  BoolColumn get isFirstRun =>
+      boolean().withDefault(const Constant(true))();
+
   TextColumn get licenseKey =>
       text().nullable()();
 

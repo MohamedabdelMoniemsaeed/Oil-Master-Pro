@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../controller/auth_controller.dart';
 import '../../dashboard/screens/dashboard_screen.dart';
 
@@ -53,7 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         final success = await ref.read(authControllerProvider.notifier)
                             .login(userController.text, passController.text);
                         if (success) {
-                          Navigator.pushReplacement(context, FluentPageRoute(builder: (_) => const DashboardScreen()));
+                          context.go('/dashboard');
                         }
                       },
                     ),

@@ -11,52 +11,49 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationView(
-      appBar: const NavigationAppBar(
-        title: Text("OilMaster Pro"),
-      ),
       pane: NavigationPane(
         selected: 0,
-        displayMode: PaneDisplayMode.open,
-        items: const [
+        displayMode: PaneDisplayMode.auto,
+        items: [
           PaneItem(
-            icon: Icon(FluentIcons.home),
-            title: Text("Dashboard"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.home),
+            title: const Text("الرئيسية"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.product),
-            title: Text("Products"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.product_variant),
+            title: const Text("المنتجات"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.people),
-            title: Text("Customers"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.people),
+            title: const Text("العملاء"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.car),
-            title: Text("Cars"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.car),
+            title: const Text("السيارات"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.receipt_check),
-            title: Text("Sales"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.receipt_check),
+            title: const Text("المبيعات"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.shopping_cart),
-            title: Text("Purchases"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.shopping_cart),
+            title: const Text("المشتريات"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.report_document),
-            title: Text("Reports"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.report_document),
+            title: const Text("التقارير"),
+            body: const SizedBox(),
           ),
           PaneItem(
-            icon: Icon(FluentIcons.settings),
-            title: Text("Settings"),
-            body: SizedBox(),
+            icon: const Icon(FluentIcons.settings),
+            title: const Text("الإعدادات"),
+            body: const SizedBox(),
           ),
         ],
       ),

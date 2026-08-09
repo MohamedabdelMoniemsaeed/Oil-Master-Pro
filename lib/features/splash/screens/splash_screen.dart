@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/service_locator.dart';
-import '../../../core/services/app_start_service.dart';
+import '../../cars/services/app_start_service.dart';
 
 import '../../settings/screens/setup_screen.dart';
 import '../../auth/screens/login_screen.dart';
@@ -42,7 +42,7 @@ class _SplashScreenState
 
 
     final service =
-        getIt<AppStartService>();
+        getIt<StartupService>();
 
 
     final firstRun =

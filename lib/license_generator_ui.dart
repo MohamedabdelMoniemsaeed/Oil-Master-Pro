@@ -95,7 +95,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                             Expanded(
                               child: Text(
                                 generatedKey,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 2,

@@ -12,6 +12,7 @@ import '../../purchases/screens/purchases_page.dart';
 import '../../auth/screens/users_screen.dart';
 import '../controller/dashboard_controller.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../../app/router/app_router.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({
@@ -104,13 +105,32 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
         ],
         footerItems: [
-          PaneItem(
+          PaneItemAction(
             icon: const Icon(FluentIcons.sign_out),
             title: const Text("تسجيل الخروج"),
-            body: const SizedBox.shrink(),
-            onTap: () {
-              ref.read(authControllerProvider.notifier).logout();
-              GoRouter.of(context).go('/login');
+            onTap: () async {
+              final result = await showDialog<String>(
+                context: context,
+                builder: (context) => ContentDialog(
+                  title: const Text('تسجيل الخروج'),
+                  content: const Text('هل أنت متأكد من رغبتك في تسجيل الخروج؟'),
+                  actions: [
+                    FilledButton(
+                      child: const Text('خروج'),
+                      onPressed: () => Navigator.pop(context, 'logout'),
+                    ),
+                    Button(
+                      child: const Text('إلغاء'),
+                      onPressed: () => Navigator.pop(context, 'cancel'),
+                    ),
+                  ],
+                ),
+              );
+
+              if (result == 'logout') {
+                ref.read(authControllerProvider.notifier).logout();
+                context.go('/login');
+              }
             },
           ),
         ],
@@ -126,11 +146,11 @@ class DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScaffoldPage(
-      header: PageHeader(
+    return ScaffoldPage(
+      header: const PageHeader(
         title: Text("لوحة التحكم"),
       ),
-      content: DashboardCards(),
+      content: const DashboardCards(),
     );
   }
 }
@@ -143,6 +163,8 @@ class DashboardCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(dashboardControllerProvider);
+    final authState = ref.watch(authControllerProvider);
+    final bool isAdmin = authState.user?.role == 'admin';
 
     if (state.isLoading) {
       return const Center(child: ProgressRing());
@@ -159,11 +181,12 @@ class DashboardCards extends ConsumerWidget {
             state.todaySales.toStringAsFixed(2),
             FluentIcons.money,
           ),
-          _card(
-            "أرباح اليوم",
-            state.todayProfit.toStringAsFixed(2),
-            FluentIcons.money,
-          ),
+          if (isAdmin)
+            _card(
+              "أرباح اليوم",
+              state.todayProfit.toStringAsFixed(2),
+              FluentIcons.money,
+            ),
           _card(
             "المنتجات",
             state.productsCount.toString(),

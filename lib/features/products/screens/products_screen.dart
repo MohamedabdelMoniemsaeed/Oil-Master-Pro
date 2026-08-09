@@ -6,7 +6,7 @@ import 'add_product_screen.dart';
 import 'edit_product_screen.dart';
 
 class ProductsScreen extends ConsumerStatefulWidget {
-  ProductsScreen({super.key});
+  const ProductsScreen({super.key});
 
   @override
   ConsumerState<ProductsScreen> createState() =>

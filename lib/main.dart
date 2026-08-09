@@ -7,13 +7,12 @@ import 'core/services/license_service.dart';
 import 'features/settings/screens/license_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   try {
-    WidgetsFlutterBinding.ensureInitialized();
-    
+    print("Initializing services...");
     await setupServiceLocator();
-
-    // License check disabled for development
-    const activated = true; 
+    print("Services initialized successfully.");
 
     runApp(
       const ProviderScope(
@@ -21,7 +20,14 @@ void main() async {
       ),
     );
   } catch (e, stack) {
-    print("CRITICAL ERROR DURING STARTUP: $e");
-    print(stack);
+    print("STARTUP ERROR: $e");
+    // Run app anyway even if locator fails, to show the error in UI
+    runApp(
+      FluentApp(
+        home: ScaffoldPage(
+          content: Center(child: Text("Error during startup: $e")),
+        ),
+      ),
+    );
   }
 }

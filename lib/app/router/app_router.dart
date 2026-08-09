@@ -6,7 +6,7 @@ import '../../features/settings/screens/license_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    initialLocation: '/dashboard',
+    initialLocation: '/login',
     routes: [
       GoRoute(
         path: '/login',
