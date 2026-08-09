@@ -12,6 +12,10 @@ import '../../purchases/screens/purchases_page.dart';
 import '../../auth/screens/users_screen.dart';
 import '../controller/dashboard_controller.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../../core/services/license_notification_service.dart';
+import '../../../core/services/service_locator.dart';
+import '../../../repositories/settings_repository.dart';
+import '../../../repositories/products_repository.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({
@@ -119,18 +123,117 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 }
 
-class DashboardContent extends StatelessWidget {
+class DashboardContent extends ConsumerWidget {
   const DashboardContent({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return const ScaffoldPage(
-      header: PageHeader(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ScaffoldPage(
+      header: const PageHeader(
         title: Text("لوحة التحكم"),
       ),
-      content: DashboardCards(),
+      content: Column(
+        children: [
+          LicenseAndAlertsStatus(),
+          const SizedBox(height: 20),
+          const Expanded(child: DashboardCards()),
+        ],
+      ),
+    );
+  }
+}
+
+class LicenseAndAlertsStatus extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder(
+      future: Future.wait([
+        getIt<SettingsRepository>().getSettings(),
+        getIt<ProductsRepository>().getProducts(),
+      ]),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        }
+
+        final settings = snapshot.data![0];
+        final products = snapshot.data![1];
+        final lowStockProducts = products.where((p) => p.quantity <= (p.minimumQuantity ?? 0)).toList();
+        final licenseStatus = LicenseNotificationService.getLicenseMessage(settings?.expiryDate);
+        final isCritical = LicenseNotificationService.isCritical(settings?.expiryDate);
+
+        return Column(
+          children: [
+            if (settings != null && LicenseNotificationService.shouldShowWarning(settings.expiryDate))
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        isCritical ? FluentIcons.error_badge : FluentIcons.warning,
+                        color: isCritical ? Colors.red : Colors.orange,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          licenseStatus,
+                          style: TextStyle(
+                            color: isCritical ? Colors.red : Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      if (isCritical)
+                        FilledButton(
+                          child: const Text('جدّد الآن'),
+                          onPressed: () => Navigator.push(
+                            context,
+                            FluentPageRoute(builder: (_) => SettingsScreen()),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            if (lowStockProducts.isNotEmpty)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        FluentIcons.warning,
+                        color: Colors.orange,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'تحذير: ${lowStockProducts.length} منتج قريب من انتهاء المخزون',
+                          style: const TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      FilledButton(
+                        child: const Text('عرض'),
+                        onPressed: () => Navigator.push(
+                          context,
+                          FluentPageRoute(builder: (_) => ProductsScreen()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -199,18 +302,24 @@ class DashboardCards extends ConsumerWidget {
             Icon(
               icon,
               size: 35,
+              color: const Color(0xFF1F6F4A),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1F6F4A),
+              ),
             ),
             Text(
               value,
               style: const TextStyle(
                 fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1F6F4A),
               ),
             ),
           ],

@@ -3,18 +3,14 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import 'app.dart';
 import 'core/services/service_locator.dart';
-import 'core/services/license_service.dart';
-import 'features/settings/screens/license_screen.dart';
 
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
-    
+
     await setupServiceLocator();
 
-    // License check disabled for development
-    const activated = true; 
-
+    // License activation is kept disabled for now and can be enabled later.
     runApp(
       const ProviderScope(
         child: CarOilShopApp(),

@@ -83,8 +83,12 @@ class _NewInvoiceScreenState
     final customerCars = allCars.where((c) => c.customerId == selectedCustomerId).toList();
 
     return ScaffoldPage(
-      header: const PageHeader(
-        title: Text("فاتورة بيع جديدة"),
+      header: PageHeader(
+        leading: IconButton(
+          icon: const Icon(FluentIcons.back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text("فاتورة بيع جديدة"),
       ),
       content: Column(
         children: [

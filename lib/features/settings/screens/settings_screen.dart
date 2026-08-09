@@ -7,10 +7,10 @@ import 'package:drift/drift.dart' hide Column;
 import '../../../core/services/service_locator.dart';
 import '../../../database/database.dart';
 import '../../../repositories/settings_repository.dart';
-
-
-
 import '../../../core/services/backup_service.dart';
+import '../../../core/services/license_service.dart';
+import '../../../core/services/license_notification_service.dart';
+import 'license_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
 
@@ -131,13 +131,14 @@ class _SettingsScreenState
     return ScaffoldPage(
 
 
-      header: const PageHeader(
-
-        title:
-        Text(
+      header: PageHeader(
+        leading: IconButton(
+          icon: const Icon(FluentIcons.back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
           "إعدادات المحل",
         ),
-
       ),
 
 
@@ -238,6 +239,93 @@ class _SettingsScreenState
                 },
               ),
             ],
+          ),
+          const SizedBox(height: 40),
+          FutureBuilder(
+            future: repository.getSettings(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox.shrink();
+              }
+              final settings = snapshot.data;
+              final licenseStatus = LicenseNotificationService.getLicenseMessage(settings?.expiryDate);
+              final statusColor = LicenseNotificationService.isCritical(settings?.expiryDate)
+                  ? Colors.red
+                  : LicenseNotificationService.shouldShowWarning(settings?.expiryDate)
+                      ? Colors.orange
+                      : Colors.green;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "معلومات الترخيص",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                LicenseNotificationService.isCritical(settings?.expiryDate)
+                                    ? FluentIcons.error_badge
+                                    : FluentIcons.info,
+                                color: statusColor,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  licenseStatus,
+                                  style: TextStyle(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          if (settings?.expiryDate != null)
+                            Row(
+                              children: [
+                                const Text(
+                                  'تاريخ الانتهاء: ',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  settings!.expiryDate!.toLocal().toString().split(' ')[0],
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          const SizedBox(height: 16),
+                          if (LicenseNotificationService.shouldShowWarning(settings?.expiryDate))
+                            FilledButton(
+                              child: const Text('جدّد الترخيص الآن'),
+                              onPressed: () async {
+                                final result = await showDialog<bool>(
+                                  context: context,
+                                  builder: (_) => const LicenseScreen(),
+                                );
+                                if (result == true) {
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),

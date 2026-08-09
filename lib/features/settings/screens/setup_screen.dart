@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 
 import '../../../core/services/service_locator.dart';
 import '../../../repositories/users_repository.dart';
+import 'license_screen.dart';
 
 import '../controller/settings_controller.dart';
 
@@ -120,10 +121,14 @@ class _SetupScreenState
       saving = false;
     });
 
+    if (!mounted) return;
 
-
-    // لاحقًا سنوجهه إلى Login
-
+    Navigator.pushReplacement(
+      context,
+      FluentPageRoute(
+        builder: (_) => const LicenseScreen(),
+      ),
+    );
   }
 
 
