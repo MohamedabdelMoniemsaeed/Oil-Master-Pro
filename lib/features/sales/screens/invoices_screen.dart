@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/service_locator.dart';
 import '../../../repositories/invoices_repository.dart';
 import '../../../database/database.dart';
+import '../../../core/services/search_and_filter_service.dart';
 
 import 'invoice_details_screen.dart';
 import 'new_invoice_screen.dart';
@@ -40,6 +41,10 @@ class InvoicesScreen extends ConsumerWidget {
     return ScaffoldPage(
 
       header: PageHeader(
+        leading: IconButton(
+          icon: const Icon(FluentIcons.back),
+          onPressed: () => Navigator.pop(context),
+        ),
 
         title: const Text(
           "الفواتير",

@@ -63,6 +63,10 @@ class InvoiceDetailsScreen extends ConsumerWidget {
 
 
       header: PageHeader(
+        leading: IconButton(
+          icon: const Icon(FluentIcons.back),
+          onPressed: () => Navigator.pop(context),
+        ),
 
 
         title: Text(

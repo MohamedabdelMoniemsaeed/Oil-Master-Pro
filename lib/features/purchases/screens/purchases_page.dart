@@ -24,6 +24,10 @@ class _PurchasesPageState extends ConsumerState<PurchasesPage> {
 
     return ScaffoldPage(
       header: PageHeader(
+        leading: IconButton(
+          icon: const Icon(FluentIcons.back),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text("المشتريات"),
         commandBar: FilledButton(
           child: const Text("فاتورة شراء جديدة"),

@@ -29,7 +29,12 @@ class _LicenseScreenState extends State<LicenseScreen> {
                   const SizedBox(height: 20),
                   Text("تنشيط البرنامج", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
-                  Text("البرنامج غير مفعل. يرجى إدخل مفتاح الترخيص الخاص بك."),
+                  Text("البرنامج غير مفعل. يرجى إدخال مفتاح الترخيص الخاص بك."),
+                  const SizedBox(height: 8),
+                  Text(
+                    "المفتاح الخاص بمتجر زيت: ${LicenseService.demoLicenseKey}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 25),
                   TextBox(
                     controller: keyController,
