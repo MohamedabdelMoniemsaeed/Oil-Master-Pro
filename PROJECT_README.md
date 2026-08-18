@@ -1,4 +1,4 @@
-# 🚀 Oil Master Pro - نظام إدارة زيوت متقدم
+# 🚀 CASHIER PRO - نظام إدارة زيوت متقدم
 
 ![Version](https://img.shields.io/badge/version-2.0-blue)
 ![Status](https://img.shields.io/badge/status-active-green)
@@ -321,7 +321,7 @@ dart run build_runner build
 
 ## 🙏 شكر وتقدير
 
-شكراً لاستخدام Oil Master Pro! نأمل أن يساعدك في إدارة عملك بكفاءة.
+شكراً لاستخدام CASHIER PRO! نأمل أن يساعدك في إدارة عملك بكفاءة.
 
 ---
 

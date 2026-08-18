@@ -1,4 +1,4 @@
-# test
+# CASHIER PRO
 
 A new Flutter project.
 

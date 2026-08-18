@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import '../database/dao/products_dao.dart';
 import '../database/database.dart';
 
@@ -12,6 +13,9 @@ class ProductsRepository {
     return dao.getAllProducts();
   }
 
+  Future<ProductsTableData?> getProductById(int id) {
+    return dao.getProductById(id);
+  }
 
   Future<int> addProduct(
     ProductsTableCompanion product,
@@ -19,15 +23,19 @@ class ProductsRepository {
     return dao.addProduct(product);
   }
 
-  Future<void> decreaseQuantity(
-  int productId,
-  int quantity,
-) {
-  return dao.decreaseQuantity(
-    productId,
-    quantity,
-  );
-}
+  Future<void> createProductWithInitialStock({
+    required ProductsTableCompanion product,
+    required int warehouseId,
+    required int initialQuantity,
+    int? userId,
+  }) {
+    return dao.createProductWithInitialStock(
+      product: product,
+      warehouseId: warehouseId,
+      initialQuantity: initialQuantity,
+      userId: userId,
+    );
+  }
 
   Future<bool> updateProduct(
     ProductsTableData product,
@@ -36,10 +44,10 @@ class ProductsRepository {
   }
 
 
-  Future<int> deleteProduct(
+  Future<String> deleteProduct(
     int id,
   ) {
-    return dao.deleteProduct(id);
+    return dao.deleteProductSecurely(id);
   }
 
 

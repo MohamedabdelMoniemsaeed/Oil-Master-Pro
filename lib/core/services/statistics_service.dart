@@ -1,4 +1,4 @@
-import '../database/database.dart';
+import '../../database/database.dart';
 
 class StatisticsService {
   static double calculateTotalSales(List<InvoicesTableData> invoices) {
@@ -6,7 +6,6 @@ class StatisticsService {
   }
 
   static double calculateTotalProfit(List<InvoicesTableData> invoices) {
-    // حساب الربح بناءً على نسبة مئوية من المبيعات
     return invoices.fold(0.0, (sum, inv) => sum + (inv.total * 0.25));
   }
 
@@ -27,7 +26,7 @@ class StatisticsService {
   }
 
   static int getLowStockProductsCount(List<ProductsTableData> products) {
-    return products.where((p) => p.quantity <= (p.minimumQuantity ?? 0)).length;
+    return products.where((p) => p.quantity <= p.minimumQuantity).length;
   }
 
   static double getTotalInventoryValue(List<ProductsTableData> products) {
@@ -49,20 +48,5 @@ class StatisticsService {
     });
     
     return topDay;
-  }
-
-  static List<ProductsTableData> getTopSellingProducts(
-    List<InvoicesTableData> invoices,
-    List<ProductsTableData> products,
-  ) {
-    // حساب مبيعات كل منتج
-    final productSales = <int, double>{};
-    
-    for (var invoice in invoices) {
-      // هذا تقريبي - نحتاج الوصول إلى تفاصيل الفاتورة
-      // productSales[product.id] = (productSales[product.id] ?? 0) + itemPrice;
-    }
-    
-    return products;
   }
 }

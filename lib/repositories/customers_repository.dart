@@ -46,11 +46,11 @@ class CustomersRepository {
 
 
 
-  Future<int> deleteCustomer(
+  Future<void> deleteCustomer(
     int id,
   ){
 
-    return dao.deleteCustomer(
+    return dao.deleteCustomerSecurely(
       id,
     );
 

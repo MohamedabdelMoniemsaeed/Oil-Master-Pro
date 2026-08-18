@@ -1,4 +1,4 @@
-# تسجيل التغييرات (Changelog) - Oil Master Pro
+# تسجيل التغييرات (Changelog) - CASHIER PRO
 
 جميع التغييرات البارزة في هذا المشروع موثقة هنا.
 

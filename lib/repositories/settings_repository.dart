@@ -27,27 +27,30 @@ class SettingsRepository {
 
 
   Future<int> saveSettings(
-    SettingsTableCompanion settings,
-  ){
-
+    SettingsTableCompanion settings, {
+    UsersTableData? user,
+  }) {
+    if (user != null && user.role != 'admin' && user.role != 'supervisor') {
+      throw Exception("ليس لديك صلاحية لتغيير إعدادات النظام.");
+    }
     return dao.saveSettings(
       settings,
     );
-
   }
 
-
-
-
   Future<bool> updateSettings(
-    SettingsTableData settings,
-  ){
-
+    SettingsTableData settings, {
+    UsersTableData? user,
+  }) {
+    if (user != null && user.role != 'admin' && user.role != 'supervisor') {
+      throw Exception("ليس لديك صلاحية لتغيير إعدادات النظام.");
+    }
     return dao.updateSettings(
       settings,
     );
-
   }
+
+  Future<void> clearOperationalData() => dao.clearOperationalData();
 
 
 }

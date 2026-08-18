@@ -316,7 +316,7 @@ git push origin main
 
 <div align="center">
 
-### 🎊 شكراً على اختيارك Oil Master Pro! 🎊
+### 🎊 شكراً على اختيارك CASHIER PRO! 🎊
 
 **صُنع بـ ❤️ من أجل عملك**
 

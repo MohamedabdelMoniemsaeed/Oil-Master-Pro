@@ -4,24 +4,25 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'app.dart';
 import 'core/services/service_locator.dart';
 import 'core/services/license_service.dart';
-import 'features/settings/screens/license_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   try {
-    print("Initializing services...");
+    debugPrint("Initializing services...");
     await setupServiceLocator();
-    print("Services initialized successfully.");
+    
+    // التحقق من حالة الترخيص عند التشغيل
+    final bool activated = await LicenseService.isActivated();
+    debugPrint("Activation status: $activated");
 
     runApp(
-      const ProviderScope(
-        child: CarOilShopApp(),
+      ProviderScope(
+        child: CashierProApp(isActivated: activated),
       ),
     );
-  } catch (e, stack) {
-    print("STARTUP ERROR: $e");
-    // Run app anyway even if locator fails, to show the error in UI
+  } catch (e) {
+    debugPrint("STARTUP ERROR: $e");
     runApp(
       FluentApp(
         home: ScaffoldPage(

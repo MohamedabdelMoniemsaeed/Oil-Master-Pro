@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'أويل ماستر برو';
+  String get appName => 'كاشير برو';
 
   @override
   String get dashboard => 'الرئيسية';
@@ -19,9 +19,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get customers => 'العملاء';
-
-  @override
-  String get cars => 'السيارات';
 
   @override
   String get sales => 'المبيعات';

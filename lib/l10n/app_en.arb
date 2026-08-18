@@ -1,10 +1,9 @@
 {
   "@@locale": "en",
-  "appName": "OilMaster Pro",
+  "appName": "CASHIER PRO",
   "dashboard": "Dashboard",
   "products": "Products",
   "customers": "Customers",
-  "cars": "Cars",
   "sales": "Sales",
   "purchases": "Purchases",
   "reports": "Reports",

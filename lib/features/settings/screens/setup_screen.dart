@@ -142,7 +142,7 @@ class _SetupScreenState
     return ScaffoldPage(
 
       header: const Text(
-        "OilMaster Pro Setup",
+        "إعداد CASHIER PRO للمرة الأولى",
       ),
 
 

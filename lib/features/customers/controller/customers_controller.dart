@@ -49,20 +49,27 @@ class CustomersController
 
   }
 
+  Future<void> updateCustomer(
+    CustomersTableData customer,
+  ) async {
+    await repository.dao.updateCustomer(customer);
+    await loadCustomers();
+  }
 
 
-  Future<void> deleteCustomer(
+
+  Future<String?> deleteCustomer(
     int id,
   ) async {
-
-
-    await repository.deleteCustomer(
-      id,
-    );
-
-
-    await loadCustomers();
-
+    try {
+      await repository.deleteCustomer(
+        id,
+      );
+      await loadCustomers();
+      return null;
+    } catch (e) {
+      return e.toString().replaceAll('Exception: ', '');
+    }
   }
 
 

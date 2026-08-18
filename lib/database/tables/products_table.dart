@@ -5,6 +5,9 @@ class ProductsTable extends Table {
 
   // باركود
   TextColumn get barcode => text().nullable()();
+  
+  // SKU / كود الصنف
+  TextColumn get sku => text().nullable()();
 
   // الاسم
   TextColumn get nameAr => text()();
@@ -13,19 +16,18 @@ class ProductsTable extends Table {
   // التصنيف
   IntColumn get categoryId => integer().nullable()();
 
-  // الشركة المصنعة
+  // العلامة التجارية / الماركة
   TextColumn get brand => text().nullable()();
+  
+  // الوحدة (قطعة، كيلو، لتر، إلخ)
+  TextColumn get unit => text().nullable().withDefault(const Constant("قطعة"))();
 
-  // نوع الزيت
-  TextColumn get oilType => text().nullable()();
-
-  // اللزوجة
+  // --- حقول إضافية (كانت مخصصة للزيوت ويمكن استخدامها لأي غرض) ---
+  TextColumn get oilType => text().nullable()(); 
   TextColumn get viscosity => text().nullable()();
-
-  // السعة
   TextColumn get size => text().nullable()();
 
-  // مكان التخزين
+  // مكان التخزين (الرف / القسم)
   TextColumn get location => text().nullable()();
 
   // سعر الشراء
@@ -36,11 +38,11 @@ class ProductsTable extends Table {
   RealColumn get salePrice =>
       real().withDefault(const Constant(0))();
 
-  // الكمية الحالية
+  // الكمية الحالية (إجمالي)
   IntColumn get quantity =>
       integer().withDefault(const Constant(0))();
 
-  // أقل كمية
+  // أقل كمية للتنبيه
   IntColumn get minimumQuantity =>
       integer().withDefault(const Constant(5))();
 

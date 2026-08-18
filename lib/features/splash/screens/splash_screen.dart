@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/service_locator.dart';
-import '../../cars/services/app_start_service.dart';
+import '../../../core/services/startup_service.dart';
 
 import '../../settings/screens/setup_screen.dart';
 import '../../auth/screens/login_screen.dart';
@@ -90,7 +90,7 @@ class _SplashScreenState
       content: Center(
 
         child: Text(
-          "OilMaster Pro",
+          "CASHIER PRO",
           style: TextStyle(
             fontSize: 35,
           ),

@@ -1,5 +1,5 @@
-name: oilHub
-description: A new Flutter project.
+name: cashier_pro
+description: CASHIER PRO - Advanced POS System.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -40,6 +40,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   go_router: ^16.2.1
   syncfusion_flutter_datagrid: ^30.2.7
+  rxdart: ^0.28.0
   intl: ^0.20.2
   get_it: ^8.2.0
   drift: ^2.29.0
@@ -49,6 +50,7 @@ dependencies:
   shared_preferences: ^2.5.3
   file_picker: ^8.0.0
   crypto: ^3.0.3
+  cryptography: ^2.7.0
   mobile_scanner: ^7.0.1
   pdf: ^3.11.3
   printing: ^5.14.2
@@ -73,12 +75,8 @@ flutter:
   generate: true
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
-  #   - assets/logo/
-  #   - assets/sounds/
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific \"variants\", see
   # https://flutter.dev/assets-and-images/#resolution-aware

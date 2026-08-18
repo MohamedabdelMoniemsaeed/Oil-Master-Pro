@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'OilMaster Pro';
+  String get appName => 'CASHIER PRO';
 
   @override
   String get dashboard => 'Dashboard';
@@ -19,9 +19,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customers => 'Customers';
-
-  @override
-  String get cars => 'Cars';
 
   @override
   String get sales => 'Sales';

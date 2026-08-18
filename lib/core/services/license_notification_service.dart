@@ -1,46 +1,45 @@
-import 'package:drift/drift.dart';
+import 'license_service.dart';
 
 class LicenseNotificationService {
-  static const Duration warningDuration = Duration(days: 30);
-  static const Duration criticalDuration = Duration(days: 7);
+  static const int warningDays = 30;
+  static const int criticalDays = 7;
 
   static String getLicenseStatus(DateTime? expiryDate) {
     if (expiryDate == null) return 'غير مفعّل';
-
     final daysLeft = expiryDate.difference(DateTime.now()).inDays;
-
-    if (daysLeft > 30) return 'صالح';
-    if (daysLeft > 7) return 'ينتهي قريبًا';
-    if (daysLeft > 0) return 'حرج';
+    if (daysLeft > warningDays) return 'صالح';
+    if (daysLeft > criticalDays) return 'ينتهي قريبًا';
+    if (daysLeft >= 0) return 'حرج';
     return 'منتهي الصلاحية';
   }
 
-  static String getLicenseMessage(DateTime? expiryDate) {
+  static String getLicenseMessage(DateTime? expiryDate, {LicenseType type = LicenseType.none}) {
     if (expiryDate == null) return 'الترخيص غير مفعّل. يرجى تفعيله من الإعدادات.';
 
     final daysLeft = expiryDate.difference(DateTime.now()).inDays;
+    final isTrial = type == LicenseType.trial;
 
-    if (daysLeft > 30) {
-      return 'الترخيص صالح حتى ${expiryDate.toLocal().toString().split(' ')[0]}';
-    } else if (daysLeft > 7) {
-      return 'تحذير: الترخيص ينتهي خلال $daysLeft أيام. يرجى التجديد قريبًا.';
-    } else if (daysLeft > 0) {
-      return 'تنبيه حرج: الترخيص سينتهي خلال $daysLeft أيام فقط!';
+    if (daysLeft > warningDays) {
+      return '${isTrial ? "التجربة المجانية" : "الترخيص"} صالحة حتى ${expiryDate.toLocal().toString().split(' ')[0]}';
+    } else if (daysLeft > criticalDays) {
+      return 'تحذير: ${isTrial ? "التجربة" : "الترخيص"} ينتهي خلال $daysLeft أيام. يرجى التفعيل للاستمرار.';
+    } else if (daysLeft >= 0) {
+      return 'تنبيه حرج: ${isTrial ? "التجربة" : "الترخيص"} ستنتهي خلال $daysLeft أيام فقط!';
     } else {
-      return 'الترخيص منتهي الصلاحية. يرجى التجديد فورًا.';
+      return '${isTrial ? "انتهت الفترة التجريبية" : "الترخيص منتهي الصلاحية"}. يرجى التفعيل فورًا.';
     }
   }
 
   static bool shouldShowWarning(DateTime? expiryDate) {
     if (expiryDate == null) return true;
     final daysLeft = expiryDate.difference(DateTime.now()).inDays;
-    return daysLeft <= 30;
+    return daysLeft <= warningDays;
   }
 
   static bool isCritical(DateTime? expiryDate) {
     if (expiryDate == null) return true;
     final daysLeft = expiryDate.difference(DateTime.now()).inDays;
-    return daysLeft <= 7;
+    return daysLeft <= criticalDays;
   }
 
   static bool isExpired(DateTime? expiryDate) {

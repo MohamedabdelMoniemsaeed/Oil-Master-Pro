@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'OilMaster Pro'**
+  /// **'CASHIER PRO'**
   String get appName;
 
   /// No description provided for @dashboard.
@@ -121,12 +121,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customers'**
   String get customers;
-
-  /// No description provided for @cars.
-  ///
-  /// In en, this message translates to:
-  /// **'Cars'**
-  String get cars;
 
   /// No description provided for @sales.
   ///

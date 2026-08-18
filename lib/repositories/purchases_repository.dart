@@ -8,7 +8,15 @@ class PurchasesRepository {
 
   Future<int> createPurchase(PurchasesTableCompanion purchase) => dao.createPurchase(purchase);
   
-  Future<void> addPurchaseItem(PurchaseItemsTableCompanion item) => dao.addPurchaseItem(item);
+  Future<void> createFullPurchase({
+    required PurchasesTableCompanion purchase,
+    required List<PurchaseItemsTableCompanion> items,
+    required int warehouseId,
+  }) => dao.createFullPurchase(
+    purchase: purchase,
+    items: items,
+    warehouseId: warehouseId,
+  );
 
   Future<List<PurchasesTableData>> getPurchases() {
     return dao.getAllPurchases();
@@ -21,4 +29,16 @@ class PurchasesRepository {
   Future<PurchasesTableData?> getPurchaseById(int id) {
     return dao.getPurchaseById(id);
   }
+
+  Future<void> deletePurchase(int id) => dao.deleteFullPurchase(id);
+
+  Future<void> editPurchase({
+    required PurchasesTableData purchase,
+    required List<PurchaseItemsTableCompanion> items,
+    required int warehouseId,
+  }) => dao.editFullPurchase(
+    purchase: purchase,
+    newItems: items,
+    warehouseId: warehouseId,
+  );
 }

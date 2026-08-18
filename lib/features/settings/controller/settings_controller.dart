@@ -6,6 +6,8 @@ import '../../../core/services/service_locator.dart';
 import '../../../repositories/settings_repository.dart';
 
 
+import '../../auth/controller/auth_controller.dart';
+
 final settingsRepositoryProvider =
     Provider<SettingsRepository>((ref) {
   return getIt<SettingsRepository>();
@@ -18,6 +20,7 @@ final settingsControllerProvider =
 
   return SettingsController(
     ref.read(settingsRepositoryProvider),
+    ref,
   );
 
 });
@@ -28,9 +31,10 @@ class SettingsController
 
 
   final SettingsRepository repository;
+  final Ref ref;
 
 
-  SettingsController(this.repository)
+  SettingsController(this.repository, this.ref)
       : super(const AsyncLoading()) {
 
     loadSettings();
@@ -65,6 +69,7 @@ class SettingsController
     required String currency,
   }) async {
 
+    final currentUser = ref.read(authControllerProvider).user;
 
     final setting =
         SettingsTableCompanion(
@@ -90,7 +95,7 @@ class SettingsController
     );
 
 
-    await repository.saveSettings(setting);
+    await repository.saveSettings(setting, user: currentUser);
 
 
     await loadSettings();

@@ -59,7 +59,7 @@ class NotificationService {
       builder: (context, close) => InfoBar(
         title: Text(title),
         content: message != null ? Text(message) : null,
-        severity: InfoBarSeverity.informational,
+        severity: InfoBarSeverity.info,
         onClose: close,
       ),
     );

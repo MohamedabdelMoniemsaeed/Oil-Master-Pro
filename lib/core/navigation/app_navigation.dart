@@ -42,16 +42,6 @@ class AppNavigation {
 
     PaneItem(
       icon: const Icon(
-        FluentIcons.car,
-      ),
-      title: const Text(
-        "السيارات",
-      ),
-    ),
-
-
-    PaneItem(
-      icon: const Icon(
         FluentIcons.money,
       ),
       title: const Text(

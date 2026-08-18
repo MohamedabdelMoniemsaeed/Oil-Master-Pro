@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "test" "\0"
+            VALUE "CompanyName", "CashierPro" "\0"
+            VALUE "FileDescription", "CASHIER PRO - POS System" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "test" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "test.exe" "\0"
-            VALUE "ProductName", "test" "\0"
+            VALUE "InternalName", "CashierPro" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 CashierPro. All rights reserved." "\0"
+            VALUE "OriginalFilename", "CashierPro.exe" "\0"
+            VALUE "ProductName", "CASHIER PRO" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -45,16 +45,27 @@ class SettingsDao extends DatabaseAccessor<AppDatabase>
         .replace(settings);
   }
 
+  Future<void> clearOperationalData() => db.clearOperationalData();
+
   Future<void> initDefaultAdmin() async {
-    final users = await db.select(db.usersTable).get();
-    if (users.isEmpty) {
+    final admin = await (db.select(db.usersTable)..where((u) => u.username.equals("admin"))).getSingleOrNull();
+    
+    // Hash of 'M07@medALh@wy' with salt 'admin' and pepper
+    const adminHash = "66023d51981ea982ebe8128bd7f0baebf16b84f547cea4609f689080aacedd6e";
+
+    if (admin == null) {
       await db.into(db.usersTable).insert(
         UsersTableCompanion.insert(
           username: "admin",
-          password: "123",
+          password: adminHash,
           fullName: "مدير النظام",
           role: const Value("admin"),
         ),
+      );
+    } else if (admin.password == "123") {
+      // Automatic update if it's the old default password
+      await (db.update(db.usersTable)..where((u) => u.id.equals(admin.id))).write(
+        const UsersTableCompanion(password: Value(adminHash)),
       );
     }
   }

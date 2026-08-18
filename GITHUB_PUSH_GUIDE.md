@@ -1,4 +1,4 @@
-# Oil Master Pro - دليل الحفظ على GitHub
+# CASHIER PRO - دليل الحفظ على GitHub
 
 ## الخطوات للحفظ على GitHub
 
@@ -15,7 +15,7 @@ git push origin main
 cd /workspaces/Oil-Master-Pro
 git init
 git add .
-git commit -m "initial commit: Oil Master Pro with comprehensive enhancements"
+git commit -m "initial commit: CASHIER PRO with comprehensive enhancements"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/Oil-Master-Pro.git
 git push -u origin main

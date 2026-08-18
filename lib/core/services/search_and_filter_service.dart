@@ -10,8 +10,8 @@ class SearchAndFilterService {
     final lowerQuery = query.toLowerCase();
     return products.where((product) {
       return product.nameAr.toLowerCase().contains(lowerQuery) ||
-          product.nameEn.toLowerCase().contains(lowerQuery) ||
-          product.barcode.toLowerCase().contains(lowerQuery);
+          (product.nameEn?.toLowerCase().contains(lowerQuery) ?? false) ||
+          (product.barcode?.toLowerCase().contains(lowerQuery) ?? false);
     }).toList();
   }
 
@@ -24,8 +24,8 @@ class SearchAndFilterService {
     final lowerQuery = query.toLowerCase();
     return customers.where((customer) {
       return customer.name.toLowerCase().contains(lowerQuery) ||
-          customer.phone?.toLowerCase().contains(lowerQuery) ?? false ||
-          customer.address?.toLowerCase().contains(lowerQuery) ?? false;
+          (customer.phone?.toLowerCase().contains(lowerQuery) ?? false) ||
+          (customer.address?.toLowerCase().contains(lowerQuery) ?? false);
     }).toList();
   }
 
@@ -44,7 +44,7 @@ class SearchAndFilterService {
     List<ProductsTableData> products,
   ) {
     return products.where((product) {
-      return product.quantity <= (product.minimumQuantity ?? 0);
+      return product.quantity <= product.minimumQuantity;
     }).toList();
   }
 

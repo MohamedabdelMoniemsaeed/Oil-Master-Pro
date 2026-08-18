@@ -13,7 +13,7 @@ class SideMenu extends StatelessWidget {
           const SizedBox(height: 30),
 
           const Icon(
-            Icons.oil_barrel,
+            Icons.shopping_cart,
             color: Colors.white,
             size: 70,
           ),
@@ -21,7 +21,7 @@ class SideMenu extends StatelessWidget {
           const SizedBox(height: 15),
 
           const Text(
-            "Car Oil Shop",
+            "CASHIER PRO",
             style: TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -34,7 +34,6 @@ class SideMenu extends StatelessWidget {
           buildItem(Icons.dashboard, "Dashboard"),
           buildItem(Icons.inventory_2, "Products"),
           buildItem(Icons.people, "Customers"),
-          buildItem(Icons.directions_car, "Cars"),
           buildItem(Icons.receipt_long, "Sales"),
           buildItem(Icons.shopping_cart, "Purchases"),
           buildItem(Icons.bar_chart, "Reports"),

@@ -1,10 +1,9 @@
 {
   "@@locale": "ar",
-  "appName": "أويل ماستر برو",
+  "appName": "كاشير برو",
   "dashboard": "الرئيسية",
   "products": "المنتجات",
   "customers": "العملاء",
-  "cars": "السيارات",
   "sales": "المبيعات",
   "purchases": "المشتريات",
   "reports": "التقارير",
